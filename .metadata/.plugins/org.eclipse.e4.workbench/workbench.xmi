@@ -2,7 +2,7 @@
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_IcCFkH54EeejosM_lD5fSQ" elementId="org.eclipse.e4.legacy.ide.application" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_IcCFkX54EeejosM_lD5fSQ" bindingContexts="_IcCFl354EeejosM_lD5fSQ">
   <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
   <tags>ModelMigrationProcessor.001</tags>
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_IcCFkX54EeejosM_lD5fSQ" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_IldHUH54EeejosM_lD5fSQ" x="161" y="161" width="400" height="300">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_IcCFkX54EeejosM_lD5fSQ" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_IldHUH54EeejosM_lD5fSQ" x="161" y="161" width="622" height="300">
     <persistedState key="coolBarVisible" value="true"/>
     <persistedState key="perspectiveBarVisible" value="false"/>
     <persistedState key="isRestored" value="true"/>
@@ -56,7 +56,12 @@
         <tags>Draggable</tags>
       </children>
     </trimBars>
-    <trimBars xmi:id="_IcCFlH54EeejosM_lD5fSQ" elementId="org.eclipse.ui.trim.vertical1" contributorURI="platform:/plugin/org.eclipse.ui.workbench" side="Left"/>
+    <trimBars xmi:id="_IcCFlH54EeejosM_lD5fSQ" elementId="org.eclipse.ui.trim.vertical1" contributorURI="platform:/plugin/org.eclipse.ui.workbench" toBeRendered="false" side="Left">
+      <children xsi:type="menu:ToolControl" xmi:id="_100n8H55EeeXOYcCUj4Uaw" elementId="org.eclipse.ui.editorss(IDEWindow).(com.statistic.count.perspective)" toBeRendered="false" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.TrimStack">
+        <tags>TrimStack</tags>
+        <tags>Draggable</tags>
+      </children>
+    </trimBars>
     <trimBars xmi:id="_IcCFlX54EeejosM_lD5fSQ" elementId="org.eclipse.ui.trim.vertical2" contributorURI="platform:/plugin/org.eclipse.ui.workbench" side="Right"/>
   </children>
   <bindingTables xmi:id="_IcCFln54EeejosM_lD5fSQ" contributorURI="platform:/plugin/org.eclipse.ui.workbench" bindingContext="_IcCFl354EeejosM_lD5fSQ">
@@ -208,6 +213,18 @@
     <persistedState key="originalCompatibilityViewBundle" value="org.eclipse.ui.ide"/>
     <tags>View</tags>
     <tags>categoryTag:General</tags>
+  </descriptors>
+  <descriptors xmi:id="_xN7x0H54Eee2ZsxAyKJERA" elementId="com.statistic.count.discription" label="DiscriptionView" iconURI="platform:/plugin/com.statistic.count/icons/control_play.png" tooltip="" category="Other" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <persistedState key="originalCompatibilityViewClass" value="Views.DiscroptionView"/>
+    <persistedState key="originalCompatibilityViewBundle" value="com.statistic.count"/>
+    <tags>View</tags>
+    <tags>categoryTag:Other</tags>
+  </descriptors>
+  <descriptors xmi:id="_xN9nAH54Eee2ZsxAyKJERA" elementId="com.statistic.count.Explorer" label="ExplorerView" iconURI="platform:/plugin/com.statistic.count/icons/control_play.png" tooltip="" category="Other" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
+    <persistedState key="originalCompatibilityViewClass" value="Views.ExplorerView"/>
+    <persistedState key="originalCompatibilityViewBundle" value="com.statistic.count"/>
+    <tags>View</tags>
+    <tags>categoryTag:Other</tags>
   </descriptors>
   <commands xmi:id="_IchNwH54EeejosM_lD5fSQ" elementId="org.eclipse.ui.window.pinEditor" commandName="Pin Editor" description="Pin the current editor" category="_Icf_p354EeejosM_lD5fSQ"/>
   <commands xmi:id="_IchNwX54EeejosM_lD5fSQ" elementId="org.eclipse.ui.navigate.nextTab" commandName="Next Tab" description="Switch to the next tab" category="_Icf_o354EeejosM_lD5fSQ"/>

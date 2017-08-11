@@ -19,5 +19,22 @@
             id="com.statistic.count.perspective">
       </perspective>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="Views.DiscroptionView"
+            icon="icons/control_play.png"
+            id="com.statistic.count.discription"
+            name="DiscriptionView"
+            restorable="true">
+      </view>
+      <view
+            class="Views.ExplorerView"
+            icon="icons/control_play.png"
+            id="com.statistic.count.Explorer"
+            name="ExplorerView"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>
