@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Count
+Bundle-SymbolicName: com.statistic.count;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: STATISTIC
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
