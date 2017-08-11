@@ -37,19 +37,30 @@
       </view>
    </extension>
    <extension
+         id="menu"
          point="org.eclipse.ui.menus">
       <menuContribution
-            allPopups="false"
+            allPopups="true"
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
+               commandId="com.statistic.count.openDialog"
                label="File">
+            <command
+                  commandId="com.statistic.count.openDialog"
+                  style="push">
+            </command>
          </menu>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="fst">
+               id="toolbar">
+            <command
+                  commandId="com.statistic.count.openDialog"
+                  label="open Dialog"
+                  style="push">
+            </command>
          </toolbar>
       </menuContribution>
    </extension>
