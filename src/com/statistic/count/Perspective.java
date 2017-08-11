@@ -3,8 +3,8 @@ package com.statistic.count;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import Views.DiscroptionView;
-import Views.ExplorerView;
+import com.statistic.views.DiscroptionView;
+import com.statistic.views.ExplorerView;
 
 public class Perspective implements IPerspectiveFactory {
 

@@ -22,14 +22,14 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="Views.DiscroptionView"
+            class="com.statistic.views.DiscroptionView"
             icon="icons/control_play.png"
             id="com.statistic.count.discription"
             name="DiscriptionView"
             restorable="true">
       </view>
       <view
-            class="Views.ExplorerView"
+            class="com.statistic.views.ExplorerView"
             icon="icons/control_play.png"
             id="com.statistic.count.Explorer"
             name="ExplorerView"
@@ -56,6 +56,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            defaultHandler="com.statistic.handlers.openDialog"
             id="com.statistic.count.openDialog"
             name="Open">
       </command>
