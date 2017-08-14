@@ -2,13 +2,15 @@ package com.statistic.folders;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ITreeContentProvider;
+
 import com.statistic.file.count.AbstractStatistic;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DirecroryStructure
+public class DirecroryStructure implements ITreeContentProvider
 {
 	// ссылка на родителя
 	public DirecroryStructure m_parent = null;
@@ -73,5 +75,37 @@ public class DirecroryStructure
 		   }
 		
 		return a_direcroryStructure.m_amountOfFiles;
+	}
+
+	@Override
+	public Object[] getElements(Object a_inputElement)
+	{
+		DirecroryStructure direcroryStructure = (DirecroryStructure)a_inputElement;
+		ArrayList<Object> ret = new ArrayList<>(direcroryStructure.m_lds);
+		ret.addAll(direcroryStructure.m_las);
+		
+		return ret.toArray();
+	}
+
+	@Override
+	public Object[] getChildren(Object a_parentElement)
+	{
+		ArrayList<Object> ret = new ArrayList<>(m_lds);
+		ret.addAll(m_las);
+		return ret.toArray();
+	}
+
+	@Override
+	public Object getParent(Object a_element)
+	{
+		DirecroryStructure direcroryStructure = (DirecroryStructure)a_element;
+		return direcroryStructure.m_parent;
+	}
+
+	@Override
+	public boolean hasChildren(Object a_element)
+	{
+		DirecroryStructure direcroryStructure = (DirecroryStructure)a_element;
+		return !direcroryStructure.m_lds.isEmpty();
 	}
 }

@@ -1,6 +1,8 @@
 package com.statistic.folders;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.statistic.file.count.AbstractStatistic;
 import com.statistic.file.count.JavaStatistic;
@@ -28,6 +30,7 @@ public enum FileFormat
 		}
 	}
 	
+			
 	// преобразование к формату перечисления
 	public static String toFormat(FileFormat a_fileFormat)
 	{
@@ -60,5 +63,14 @@ public enum FileFormat
 			System.out.println("Format was not recognised");
 			return null;
 		}
+	}
+	
+	// Возвращает список доступных расширений
+	public static List<FileFormat> getAllPossibleFileFormat()
+	{
+		ArrayList<FileFormat> arrayList = new ArrayList<>();
+		arrayList.add(FileFormat.Java);
+		arrayList.add(FileFormat.Xml);
+		return arrayList;
 	}
 }
