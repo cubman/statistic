@@ -5,5 +5,7 @@ Bundle-SymbolicName: com.statistic.count;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: STATISTIC
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.eclipse.ui.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Activator: com.statistic.count.Activator

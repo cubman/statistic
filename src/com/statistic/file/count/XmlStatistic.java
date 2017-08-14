@@ -3,6 +3,9 @@ package com.statistic.file.count;
 import java.io.File;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+
 public class XmlStatistic extends AbstractStatistic
 {
 
@@ -24,6 +27,13 @@ public class XmlStatistic extends AbstractStatistic
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ImageDescriptor getImage()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

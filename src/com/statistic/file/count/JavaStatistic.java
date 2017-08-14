@@ -1,7 +1,19 @@
 package com.statistic.file.count;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Map;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
+import com.statistic.count.Activator;
+
 
 public class JavaStatistic extends AbstractStatistic
 {
@@ -24,6 +36,13 @@ public class JavaStatistic extends AbstractStatistic
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ImageDescriptor getImage()
+	{
+		//return new Image(Display.getDefault(), getClass().getResourceAsStream("/icons/java.png"));
+		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt", "/icons/full/obj16/fldr_obj.gif");
 	}
 
 	

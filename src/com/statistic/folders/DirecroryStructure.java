@@ -7,7 +7,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import com.statistic.file.count.AbstractStatistic;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class DirecroryStructure implements ITreeContentProvider
@@ -90,8 +89,9 @@ public class DirecroryStructure implements ITreeContentProvider
 	@Override
 	public Object[] getChildren(Object a_parentElement)
 	{
-		ArrayList<Object> ret = new ArrayList<>(m_lds);
-		ret.addAll(m_las);
+		DirecroryStructure direcroryStructure = (DirecroryStructure)a_parentElement;
+		ArrayList<Object> ret = new ArrayList<>(direcroryStructure.m_lds);
+		ret.addAll(direcroryStructure.m_las);
 		return ret.toArray();
 	}
 
@@ -105,7 +105,12 @@ public class DirecroryStructure implements ITreeContentProvider
 	@Override
 	public boolean hasChildren(Object a_element)
 	{
+		if (a_element instanceof AbstractStatistic)
+			return false;
+		
 		DirecroryStructure direcroryStructure = (DirecroryStructure)a_element;
-		return !direcroryStructure.m_lds.isEmpty();
+		ArrayList<Object> ret = new ArrayList<>(direcroryStructure.m_lds);
+		ret.addAll(direcroryStructure.m_las);
+		return !ret.isEmpty();
 	}
 }

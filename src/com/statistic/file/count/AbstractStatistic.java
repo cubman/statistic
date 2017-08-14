@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+
 public abstract class AbstractStatistic
 {
 	// статистика
@@ -33,4 +36,6 @@ public abstract class AbstractStatistic
 	{
 		return file.getPath();
 	}
+	
+	public abstract ImageDescriptor getImage();
 }
