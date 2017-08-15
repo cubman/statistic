@@ -10,12 +10,12 @@ import org.eclipse.swt.graphics.Image;
 public abstract class AbstractStatistic
 {
 	// статистика
-	Map<String, Double>	m_statisticForDirectory	= new HashMap();
+	Map<String, Integer>	m_statisticForDirectory	= new HashMap();
 	// статистика
-	Map<String, Double>	m_statisticForFile		= new HashMap();
+	Map<String, Integer>	m_statisticForFile		= new HashMap();
 
-	// файл с указанным форматом
-	File					file;
+	
+	File					file;// файл с указанным форматом
 
 	// конструктор
 	public AbstractStatistic(File a_file)
@@ -23,14 +23,14 @@ public abstract class AbstractStatistic
 		file = a_file;
 	}
 
-	// получить статистику общую в поиске директорий
-	public Map<String, Double> getDirectoryStatistc()
+	/* получить статистику общую в поиске директорий*/
+	public Map<String, Integer> getDirectoryStatistc()
 	{
 		return m_statisticForDirectory;
 	}
 
 	// получить статистику общую о файле
-	public Map<String, Double> getFileStatistc()
+	public Map<String, Integer> getFileStatistc()
 	{
 		return m_statisticForFile;
 	}

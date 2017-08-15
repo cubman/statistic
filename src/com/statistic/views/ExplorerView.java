@@ -64,17 +64,16 @@ public class ExplorerView extends ViewPart
 	        if (selectedNode instanceof DirecroryStructure) {
 	        	DirecroryStructure direcroryStructure = (DirecroryStructure)selectedNode;
 
-	        	resultForTable = DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure);
+	        	m_discroptionView.printDirectoryStatistic(DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure));
 	        	System.out.println(direcroryStructure.m_directoryName);
 	        }
 	        else {
 	        	AbstractStatistic abstractStatistic = (AbstractStatistic)selectedNode;
-	        	resultForTable = abstractStatistic.getFileStatistc();
 	        	
+	        	m_discroptionView.printFileStatistic(abstractStatistic);
 	        	System.out.println(abstractStatistic.getLongFileName());
 			}
-	        
-	        m_discroptionView.printStatistic(resultForTable);
+
 		});
 		
 		GridData gridData = new GridData();

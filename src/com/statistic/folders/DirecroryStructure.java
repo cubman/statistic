@@ -123,26 +123,27 @@ public class DirecroryStructure implements ITreeContentProvider
 	}
 	
 	// получить статистику для директории 
-	public static Map<String, Integer> getStatisticForSelectedFolder(DirecroryStructure a_direcroryStructure) {
-			Map<String, Integer> result = new HashMap<>();
+	public static List<AbstractStatistic> getStatisticForSelectedFolder(DirecroryStructure a_direcroryStructure) {
+			List<AbstractStatistic> result = new ArrayList();
 			countStatisticForDirectory(a_direcroryStructure, result);
 			
 			return result;
 	}
 	
-	private static void countStatisticForDirectory(DirecroryStructure a_direcroryStructure, Map< String, Integer> a_statistic)
+	private static void countStatisticForDirectory(DirecroryStructure a_direcroryStructure, List<AbstractStatistic> a_statistic)
 	{
 		for (DirecroryStructure direcroryStructure : a_direcroryStructure.m_lds)
 			countStatisticForDirectory(direcroryStructure, a_statistic);
+		a_statistic.addAll(a_direcroryStructure.m_las);
 		
-		for (AbstractStatistic abstractStatistic : a_direcroryStructure.m_las) {
+		/*for (AbstractStatistic abstractStatistic : a_direcroryStructure.m_las) {
 			for (Map.Entry<String, Integer>statistic : abstractStatistic.getDirectoryStatistc().entrySet())
 				if (a_statistic.containsKey(statistic.getKey()))
 					a_statistic.put(statistic.getKey(), statistic.getValue() + a_statistic.get(statistic.getKey()));
 				else {
 					a_statistic.put(statistic.getKey(), statistic.getValue());
 				}
-		}
+		}*/
 	}
 
 }
