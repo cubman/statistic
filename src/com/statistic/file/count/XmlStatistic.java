@@ -20,14 +20,5 @@ public class XmlStatistic extends AbstractStatistic
 	{
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public ImageDescriptor getImage()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
+	}	
 }

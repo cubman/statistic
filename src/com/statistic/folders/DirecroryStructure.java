@@ -47,7 +47,7 @@ public class DirecroryStructure implements ITreeContentProvider
 	{
 		// если файл - папка
 		if (a_file.isDirectory()) {
-			  System.out.println("Searching directory ... " + a_file.getAbsoluteFile());
+			  //System.out.println("Searching directory ... " + a_file.getAbsoluteFile());
 
 		            //do you have permission to read this directory?
 			    if (a_file.canRead()) {
@@ -105,6 +105,9 @@ public class DirecroryStructure implements ITreeContentProvider
 	@Override
 	public Object getParent(Object a_element)
 	{
+		if (a_element instanceof AbstractStatistic)
+			return null;
+		
 		DirecroryStructure direcroryStructure = (DirecroryStructure)a_element;
 		return direcroryStructure.m_parent;
 	}

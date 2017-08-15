@@ -21,6 +21,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.statistic.file.count.AbstractStatistic;
+import com.statistic.file.viewer.IFormatViewer;
 
 // обозреватель файлов
 public class FileBrowser {
@@ -41,8 +42,8 @@ public class FileBrowser {
     
     // создание начального состояний структуры отображения дерева
     @PostConstruct
-    public void createControls(DirecroryStructure a_direcroryStructure, AbstractStatistic a_abstractStatistic) {
-        viewer.setLabelProvider(new ViewLabelProvider(createImageOfDirectory(), createImageOfFile(a_abstractStatistic)));
+    public void createControls(DirecroryStructure a_direcroryStructure, IFormatViewer a_formatViewer) {
+        viewer.setLabelProvider(new ViewLabelProvider(createImageOfDirectory(), createImageOfFile(a_formatViewer)));
         viewer.setFilters(new MyFilter());
         viewer.setInput(a_direcroryStructure);
     }
@@ -55,8 +56,8 @@ public class FileBrowser {
     }
 
     // изображение файла
-    private ImageDescriptor createImageOfFile(AbstractStatistic a_abstractStatistic) {
-    	return a_abstractStatistic.getImage();
+    private ImageDescriptor createImageOfFile(IFormatViewer a_formatViewer) {
+    	return a_formatViewer.getFileImage();
     	
        // return ImageDescriptor.createFromImage(a_abstractStatistic.getImage());
     }

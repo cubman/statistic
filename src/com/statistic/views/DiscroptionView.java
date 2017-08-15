@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.file.count.AbstractStatistic;
+import com.statistic.file.viewer.IFormatViewer;
 
 public class DiscroptionView extends ViewPart
 {
@@ -28,6 +29,7 @@ public class DiscroptionView extends ViewPart
 
 	TableViewer m_tableViewer;
 	Table m_table;
+	public IFormatViewer m_iTableViewer;
 	
 	public DiscroptionView()
 	{
@@ -68,53 +70,12 @@ public class DiscroptionView extends ViewPart
 
 	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics)
 	{
-		/*
-		int count = 0;
-		for (Map.Entry<String, Integer> statistic : a_statistic.entrySet()) {
-			System.out.println(statistic.getKey() + "   " + statistic.getValue());
-			TableItem item = new TableItem (m_table, SWT.NONE);
-			item.setText (0, String.valueOf(++count));
-			item.setText (1, statistic.getKey());
-			item.setText (2, String.valueOf(statistic.getValue()));
-		}
-		
-		for (int i=0; i<m_table.getColumnOrder().length; ++i) 
-			m_table.getColumn (i).pack ();
-		*/
+		m_iTableViewer.setAndPrintDirectory(a_abstractStatistics, m_table);
 	}
 	
 	public void printFileStatistic(AbstractStatistic a_statistic)
 	{
-		/*Table table = m_tableViewer.getTable();
-		table.setLinesVisible (true);
-		table.setHeaderVisible (true);
-		table.removeAll();
-		
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-		data.heightHint = 200;
-		table.setLayoutData(data);
-		
-		String[] titles = {" ", "Наименование", "Описание"};
-		
-		for (int i=0; i<titles.length; i++) {
-			TableColumn column = new TableColumn (table, SWT.NONE);
-			column.setText (titles [i]);
-		}*/
-		
-		int count = 0;
-		for (Map.Entry<String, Double> statistic : a_statistic.getFileStatistc().entrySet()) {
-			System.out.println(statistic.getKey() + "   " + statistic.getValue());
-			TableItem item = new TableItem (m_table, SWT.NONE);
-			item.setText (0, String.valueOf(++count));
-			item.setText (1, statistic.getKey());
-			item.setText (2, String.valueOf(statistic.getValue()));
-		}
-		
-		for (int i=0; i<m_table.getColumnOrder().length; ++i) 
-			m_table.getColumn (i).pack();
-		
-	
-		
+		m_iTableViewer.setAndPrintFolder(a_statistic, m_table);
 		
 		
 	}
@@ -125,5 +86,4 @@ public class DiscroptionView extends ViewPart
 		// TODO Auto-generated method stub
 
 	}
-
 }

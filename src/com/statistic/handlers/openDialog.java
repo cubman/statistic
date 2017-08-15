@@ -20,50 +20,61 @@ import com.statistic.views.DiscroptionView;
 import com.statistic.views.ExplorerView;
 
 public class openDialog extends AbstractHandler implements IHandler
-{	
+{
 	@Override
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
 	{
 
 		Shell shell = new Shell(Display.getDefault());
- 	   // shell.open();
- 	    DirectoryDialog dialog = new DirectoryDialog(shell);
- 	    dialog.setFilterPath("c:\\"); // Windows specific
- 	   // System.out.println("RESULT=" + dialog.open());
- 	    
- 	    String reString = dialog.open();
- 	    
- 	    if (reString == null)
- 	    	MessageDialog.openWarning(shell, "Предупреждение", "Вы не выбрали директорию");
- 	    else {
- 	    	DirecroryStructure direcroryStructure = DirecroryStructure.createDirectory(new File(reString /*"D:\\EclipseWorkDirectory\\git project\\statistic\\src\\com"*/), FileFormat.Java);
- 			// direcroryStructure.m_parent = null;
- 			
- 			try
- 			{
- 				DiscroptionView discroptionView = (DiscroptionView)HandlerUtil.getActiveWorkbenchWindow(a_event).getActivePage().showView(DiscroptionView.ID);
- 				
- 				ExplorerView explorerView = (ExplorerView)HandlerUtil.getActiveWorkbenchWindow(a_event).getActivePage().showView(ExplorerView.ID);
- 				FileBrowser fileBrowser = new FileBrowser(explorerView.m_table);
- 				fileBrowser.setProvider(direcroryStructure);
- 				fileBrowser.createControls(direcroryStructure, 
- 						FileFormat.toAbstractStatistic(
- 								FileFormat.toString(
- 										explorerView.comboDropDown.getItem(
- 												explorerView.comboDropDown.getSelectionIndex())), null));
- 				
- 				explorerView.m_discroptionView = discroptionView;
- 			}
- 			catch(PartInitException e)
- 			{
- 				// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			}
+		// shell.open();
+		DirectoryDialog dialog = new DirectoryDialog(shell);
+		dialog.setFilterPath("D:\\EclipseWorkDirectory\\git project\\statistic\\src\\com"); // Windows specific
+		// System.out.println("RESULT=" + dialog.open());
+
+		String reString = dialog.open();
+
+		if(reString == null)
+			MessageDialog.openWarning(shell, "Предупреждение", "Вы не выбрали директорию");
+		else
+		{
+			
+			// direcroryStructure.m_parent = null;
+
+			try
+			{
+				DiscroptionView discroptionView = (DiscroptionView) HandlerUtil
+						.getActiveWorkbenchWindow(a_event).getActivePage()
+						.showView(DiscroptionView.ID);
+
+				ExplorerView explorerView = (ExplorerView) HandlerUtil
+						.getActiveWorkbenchWindow(a_event).getActivePage()
+						.showView(ExplorerView.ID);
+				
+				FileFormat fileFormat = 
+						FileFormat.toString(explorerView.comboDropDown
+								.getItem(explorerView.comboDropDown.getSelectionIndex()));
+				
+				DirecroryStructure direcroryStructure = DirecroryStructure.createDirectory(new File(reString), fileFormat);
+					
+				
+				discroptionView.m_iTableViewer = FileFormat.toTableViewer(fileFormat);
+				
+				FileBrowser fileBrowser = new FileBrowser(explorerView.m_table);
+				fileBrowser.setProvider(direcroryStructure);
+				fileBrowser.createControls(direcroryStructure, FileFormat.toTableViewer(fileFormat));
+
+				explorerView.m_discroptionView = discroptionView;
+			}
+			catch(PartInitException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// TODO Auto-generated method stub
-		
+
 		return null;
-		
+
 	}
 
 }

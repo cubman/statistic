@@ -1,7 +1,9 @@
 package com.statistic.file.count;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -10,9 +12,9 @@ import org.eclipse.swt.graphics.Image;
 public abstract class AbstractStatistic
 {
 	// статистика
-	Map<String, Double>	m_statisticForDirectory	= new HashMap();
+	List<Object>	m_statisticForDirectory	= new ArrayList<>();
 	// статистика
-	Map<String, Double>	m_statisticForFile		= new HashMap();
+	List<Object>	m_statisticForFile		= new ArrayList();
 
 	// файл с указанным форматом
 	File					file;
@@ -24,13 +26,13 @@ public abstract class AbstractStatistic
 	}
 
 	// получить статистику общую в поиске директорий
-	public Map<String, Double> getDirectoryStatistc()
+	public List<Object> getDirectoryStatistc()
 	{
 		return m_statisticForDirectory;
 	}
 
 	// получить статистику общую о файле
-	public Map<String, Double> getFileStatistc()
+	public List<Object> getFileStatistc()
 	{
 		return m_statisticForFile;
 	}
@@ -49,7 +51,4 @@ public abstract class AbstractStatistic
 	{
 		return file.getPath();
 	}
-
-	// получить иконку для формата
-	public abstract ImageDescriptor getImage();
 }
