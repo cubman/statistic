@@ -16,12 +16,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import com.statistic.folders.DirecroryStructure;
 import com.statistic.folders.FileBrowser;
 import com.statistic.folders.FileFormat;
+import com.statistic.views.DiscroptionView;
 import com.statistic.views.ExplorerView;
-import com.statistic.views.OpenDialog;
 
 public class openDialog extends AbstractHandler implements IHandler
-{
-
+{	
 	@Override
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
 	{
@@ -42,10 +41,18 @@ public class openDialog extends AbstractHandler implements IHandler
  			
  			try
  			{
+ 				DiscroptionView discroptionView = (DiscroptionView)HandlerUtil.getActiveWorkbenchWindow(a_event).getActivePage().showView(DiscroptionView.ID);
+ 				
  				ExplorerView explorerView = (ExplorerView)HandlerUtil.getActiveWorkbenchWindow(a_event).getActivePage().showView(ExplorerView.ID);
  				FileBrowser fileBrowser = new FileBrowser(explorerView.m_table);
- 				fileBrowser.setPrivider(direcroryStructure);
- 				fileBrowser.createControls(direcroryStructure, FileFormat.toAbstractStatistic(FileFormat.Java, null));
+ 				fileBrowser.setProvider(direcroryStructure);
+ 				fileBrowser.createControls(direcroryStructure, 
+ 						FileFormat.toAbstractStatistic(
+ 								FileFormat.toString(
+ 										explorerView.comboDropDown.getItem(
+ 												explorerView.comboDropDown.getSelectionIndex())), null));
+ 				
+ 				explorerView.m_discroptionView = discroptionView;
  			}
  			catch(PartInitException e)
  			{

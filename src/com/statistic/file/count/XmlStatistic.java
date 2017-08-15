@@ -16,13 +16,6 @@ public class XmlStatistic extends AbstractStatistic
 	}
 
 	@Override
-	public Map<String, String> getStatistc()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void countStatistic()
 	{
 		// TODO Auto-generated method stub

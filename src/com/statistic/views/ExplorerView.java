@@ -1,13 +1,24 @@
 package com.statistic.views;
 
+import java.util.Map;
+
+import javax.lang.model.element.Element;
+
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.ViewPart;
 
+import com.statistic.file.count.AbstractStatistic;
+import com.statistic.folders.DirecroryStructure;
 import com.statistic.folders.FileFormat;
 
 public class ExplorerView extends ViewPart
@@ -17,6 +28,8 @@ public class ExplorerView extends ViewPart
 	
 	public TreeViewer m_table;
 	public Combo comboDropDown;
+	public DiscroptionView m_discroptionView;
+	public Map<String, Integer> resultForTable;
 	
 	public ExplorerView()
 	{
@@ -26,6 +39,7 @@ public class ExplorerView extends ViewPart
 	@Override
 	public void createPartControl(Composite a_parent)
 	{	
+		
 		FillLayout fillLayout = new FillLayout();
 		fillLayout.type = SWT.VERTICAL;
 		a_parent.setLayout(fillLayout);
@@ -36,6 +50,32 @@ public class ExplorerView extends ViewPart
 		/*GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.FILL;
 		m_table.(gridData);*/
+		m_table.addDoubleClickListener(listener -> {
+			TreeViewer viewer = (TreeViewer) listener.getViewer();
+	        IStructuredSelection thisSelection = (IStructuredSelection) listener.getSelection();
+	        Object selectedNode = thisSelection.getFirstElement();
+	        Map<String, Integer> forTableResult = null;
+	        
+	        if (m_discroptionView == null) {
+	        	System.out.println("Описание пусто");
+	        
+	        	return;
+	        }
+	        if (selectedNode instanceof DirecroryStructure) {
+	        	DirecroryStructure direcroryStructure = (DirecroryStructure)selectedNode;
+
+	        	resultForTable = DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure);
+	        	System.out.println(direcroryStructure.m_directoryName);
+	        }
+	        else {
+	        	AbstractStatistic abstractStatistic = (AbstractStatistic)selectedNode;
+	        	resultForTable = abstractStatistic.getFileStatistc();
+	        	
+	        	System.out.println(abstractStatistic.getLongFileName());
+			}
+	        
+	        m_discroptionView.printStatistic(resultForTable);
+		});
 		
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.END;

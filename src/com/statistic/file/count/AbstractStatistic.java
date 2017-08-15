@@ -10,8 +10,10 @@ import org.eclipse.swt.graphics.Image;
 public abstract class AbstractStatistic
 {
 	// статистика
-	Map<String, String> statisticResult = new HashMap();
-	
+	Map<String, Integer> m_statisticForDirectory = new HashMap();
+	// статистика
+	Map<String, Integer> m_statisticForFile = new HashMap();
+		
 	// файл с указанным форматом
 	File file;
 	
@@ -20,8 +22,15 @@ public abstract class AbstractStatistic
 		file = a_file;
 	}
 	
-	// получить статистику
-	abstract public Map<String, String> getStatistc();
+	// получить статистику общую в поиске директорий
+	public Map<String, Integer> getDirectoryStatistc() {
+		return m_statisticForDirectory;
+	}
+	
+	// получить статистику общую о файле
+	public Map<String, Integer> getFileStatistc() {
+		return m_statisticForFile;
+	}
 	
 	// посчитать статистику
 	abstract public void countStatistic();
@@ -37,5 +46,6 @@ public abstract class AbstractStatistic
 		return file.getPath();
 	}
 	
+	// получить иконку для формата
 	public abstract ImageDescriptor getImage();
 }

@@ -1,6 +1,7 @@
 package com.statistic.folders;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
@@ -8,6 +9,7 @@ import com.statistic.file.count.AbstractStatistic;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DirecroryStructure implements ITreeContentProvider
 {
@@ -61,7 +63,9 @@ public class DirecroryStructure implements ITreeContentProvider
 				    } else {
 				    	// файл имеет указанный формат
 					if (temp.getName().endsWith(FileFormat.toFormat(a_fileFormat))) {
-						a_direcroryStructure.m_las.add(FileFormat.toAbstractStatistic(a_fileFormat, temp) );
+						AbstractStatistic abstractStatistic = FileFormat.toAbstractStatistic(a_fileFormat, temp);
+						abstractStatistic.countStatistic();
+						a_direcroryStructure.m_las.add(abstractStatistic);
 				    }
 
 				  }
@@ -76,6 +80,7 @@ public class DirecroryStructure implements ITreeContentProvider
 		return a_direcroryStructure.m_amountOfFiles;
 	}
 
+	// получить все элементы для текущего элемента дерева
 	@Override
 	public Object[] getElements(Object a_inputElement)
 	{
@@ -86,6 +91,7 @@ public class DirecroryStructure implements ITreeContentProvider
 		return ret.toArray();
 	}
 
+	// получить для корневого дочерние элементы
 	@Override
 	public Object[] getChildren(Object a_parentElement)
 	{
@@ -95,6 +101,7 @@ public class DirecroryStructure implements ITreeContentProvider
 		return ret.toArray();
 	}
 
+	// получить родительскую ссылку
 	@Override
 	public Object getParent(Object a_element)
 	{
@@ -102,6 +109,7 @@ public class DirecroryStructure implements ITreeContentProvider
 		return direcroryStructure.m_parent;
 	}
 
+	// проверить наличие дочерних узлов
 	@Override
 	public boolean hasChildren(Object a_element)
 	{
@@ -113,4 +121,28 @@ public class DirecroryStructure implements ITreeContentProvider
 		ret.addAll(direcroryStructure.m_las);
 		return !ret.isEmpty();
 	}
+	
+	// получить статистику для директории 
+	public static Map<String, Integer> getStatisticForSelectedFolder(DirecroryStructure a_direcroryStructure) {
+			Map<String, Integer> result = new HashMap<>();
+			countStatisticForDirectory(a_direcroryStructure, result);
+			
+			return result;
+	}
+	
+	private static void countStatisticForDirectory(DirecroryStructure a_direcroryStructure, Map< String, Integer> a_statistic)
+	{
+		for (DirecroryStructure direcroryStructure : a_direcroryStructure.m_lds)
+			countStatisticForDirectory(direcroryStructure, a_statistic);
+		
+		for (AbstractStatistic abstractStatistic : a_direcroryStructure.m_las) {
+			for (Map.Entry<String, Integer>statistic : abstractStatistic.getDirectoryStatistc().entrySet())
+				if (a_statistic.containsKey(statistic.getKey()))
+					a_statistic.put(statistic.getKey(), statistic.getValue() + a_statistic.get(statistic.getKey()));
+				else {
+					a_statistic.put(statistic.getKey(), statistic.getValue());
+				}
+		}
+	}
+
 }
