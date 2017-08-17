@@ -12,14 +12,14 @@ public class XmlViewer implements IFormatViewer
 {
 
 	@Override
-	public void setAndPrintDirectory(List<AbstractStatistic> a_list, Table a_table)
+	public void setAndPrintDirectory(List<AbstractStatistic> a_list)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void setAndPrintFolder(AbstractStatistic a_list, Table a_table)
+	public void setAndPrintFolder(AbstractStatistic a_list)
 	{
 		// TODO Auto-generated method stub
 
@@ -28,7 +28,8 @@ public class XmlViewer implements IFormatViewer
 	@Override
 	public ImageDescriptor getFileImage()
 	{
-		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt", "/icons/full/obj16/fldr_obj.gif");
+		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt",
+				"/icons/full/obj16/fldr_obj.gif");
 	}
 
 }

@@ -19,6 +19,6 @@ public class XmlStatistic extends AbstractStatistic
 	public void countStatistic()
 	{
 		// TODO Auto-generated method stub
-		
-	}	
+
+	}
 }

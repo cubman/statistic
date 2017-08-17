@@ -9,34 +9,43 @@ import org.eclipse.ui.PlatformUI;
 /**
  * This class controls all aspects of the application's execution
  */
-public class Application implements IApplication {
+public class Application implements IApplication
+{
 
 	@Override
-	public Object start(IApplicationContext context) throws Exception {
+	public Object start(IApplicationContext context) throws Exception
+	{
 		Display display = PlatformUI.createDisplay();
-		try {
-			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
-			if (returnCode == PlatformUI.RETURN_RESTART)
+		try
+		{
+			int returnCode = PlatformUI.createAndRunWorkbench(display,
+					new ApplicationWorkbenchAdvisor());
+			if(returnCode == PlatformUI.RETURN_RESTART)
 				return IApplication.EXIT_RESTART;
 			else
 				return IApplication.EXIT_OK;
-		} finally {
+		}
+		finally
+		{
 			display.dispose();
 		}
-		
+
 	}
 
 	@Override
-	public void stop() {
-		if (!PlatformUI.isWorkbenchRunning())
+	public void stop()
+	{
+		if(!PlatformUI.isWorkbenchRunning())
 			return;
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		final Display display = workbench.getDisplay();
-		display.syncExec(new Runnable() {
-			public void run() {
-				if (!display.isDisposed())
-					workbench.close();
-			}
-		});
+		display.syncExec(new Runnable()
+			{
+				public void run()
+				{
+					if(!display.isDisposed())
+						workbench.close();
+				}
+			});
 	}
 }

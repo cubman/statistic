@@ -1,4 +1,5 @@
 package com.statistic.folders;
+
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
@@ -24,121 +25,123 @@ import com.statistic.file.count.AbstractStatistic;
 import com.statistic.file.viewer.IFormatViewer;
 
 // обозреватель файлов
-public class FileBrowser {
-	
-	// дерево файлов
-    private TreeViewer viewer;
+public class FileBrowser
+{
 
-    public FileBrowser(TreeViewer a_treeViewer)
+	// дерево файлов
+	private TreeViewer viewer;
+
+	public FileBrowser(TreeViewer a_treeViewer)
 	{
 		viewer = a_treeViewer;
 	}
-    
-    // установить источник данных для отображения
-    public  void setProvider(ITreeContentProvider a_contentProvider)
+
+	// создание начального состояний структуры отображения дерева
+	@PostConstruct
+	public void createControls(DirecroryStructure a_direcroryStructure,
+			IFormatViewer a_formatViewer)
 	{
-		viewer.setContentProvider(a_contentProvider);
+		viewer.setContentProvider(a_direcroryStructure);
+		
+		viewer.setLabelProvider(
+				new ViewLabelProvider(createImageOfDirectory(), createImageOfFile(a_formatViewer)));
+		viewer.setFilters(new FilterEmptyFolders());
+		viewer.setInput(a_direcroryStructure);
 	}
-    
-    // создание начального состояний структуры отображения дерева
-    @PostConstruct
-    public void createControls(DirecroryStructure a_direcroryStructure, IFormatViewer a_formatViewer) {
-        viewer.setLabelProvider(new ViewLabelProvider(createImageOfDirectory(), createImageOfFile(a_formatViewer)));
-        viewer.setFilters(new MyFilter());
-        viewer.setInput(a_direcroryStructure);
-    }
 
-    // изображение директории
-    private ImageDescriptor createImageOfDirectory() {
-        Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-        URL url = FileLocator.find(bundle, new Path("icons/folder.png"), null);
-        return ImageDescriptor.createFromURL(url);
-    }
+	// изображение директории
+	private ImageDescriptor createImageOfDirectory()
+	{
+		Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
+		URL url = FileLocator.find(bundle, new Path("icons/folder.png"), null);
+		return ImageDescriptor.createFromURL(url);
+	}
 
-    // изображение файла
-    private ImageDescriptor createImageOfFile(IFormatViewer a_formatViewer) {
-    	return a_formatViewer.getFileImage();
-    	
-       // return ImageDescriptor.createFromImage(a_abstractStatistic.getImage());
-    }
-    
-    
-    
-    // клсс иконка - текст файла
-    class ViewLabelProvider extends LabelProvider /*implements IStyledLabelProvider */{
+	// изображение файла
+	private ImageDescriptor createImageOfFile(IFormatViewer a_formatViewer)
+	{
+		return a_formatViewer.getFileImage();
 
-    	// изображение директории
-        private ImageDescriptor directoryImage; 
-        // изображение файла
-        private ImageDescriptor fileImage;
-        //объект ресурсов проета
-        private ResourceManager resourceManager;
+		// return
+		// ImageDescriptor.createFromImage(a_abstractStatistic.getImage());
+	}
 
-        public ViewLabelProvider(ImageDescriptor directoryImage, ImageDescriptor a_fileDescriptor) {
-            this.directoryImage = directoryImage;
-            this.fileImage = a_fileDescriptor;
-        }
+	// клсс иконка - текст файла
+	class ViewLabelProvider extends LabelProvider
+	/* implements IStyledLabelProvider */ {
 
-        // получение название файла
-        @Override
-        public String getText(Object a_element)
-        {
-        	if (a_element instanceof DirecroryStructure) {
-        		DirecroryStructure direcroryStructure = ((DirecroryStructure)a_element);
-        		return String.format("%s ( %d )", direcroryStructure.m_directoryName, direcroryStructure.m_amountOfFiles);
-        	}
-        	else return ((AbstractStatistic)a_element).getShortFileName();
+		// изображение директории
+		private ImageDescriptor	directoryImage;
+		// изображение файла
+		private ImageDescriptor	fileImage;
+		// объект ресурсов проета
+		private ResourceManager	resourceManager;
 
-        }
-      
-        // установка изображения ждя файла
-        @Override
-        public Image getImage(Object element) {
-                return element instanceof DirecroryStructure ? 
-                		getResourceManager().createImage(directoryImage) :
-                			getResourceManager().createImage(fileImage);          
-        }
+		public ViewLabelProvider(ImageDescriptor directoryImage, ImageDescriptor a_fileDescriptor)
+		{
+			this.directoryImage = directoryImage;
+			this.fileImage = a_fileDescriptor;
+		}
 
-        // очищение ресурсов
-        @Override
-        public void dispose() {
-            // garbage collection system resources
-            if (resourceManager != null) {
-                resourceManager.dispose();
-                
-            resourceManager = null;
-            }
-        }
+		// получение название файла
+		@Override
+		public String getText(Object a_element)
+		{
+			if(a_element instanceof DirecroryStructure)
+			{
+				DirecroryStructure direcroryStructure = ((DirecroryStructure) a_element);
+				return String.format("%s ( %d )", direcroryStructure.m_directoryName,
+						direcroryStructure.m_amountOfFiles);
+			}
+			else
+				return ((AbstractStatistic) a_element).getShortFileName();
 
-        // выделение ресурсов
-        protected ResourceManager getResourceManager() {
-            if (resourceManager == null) {
-                resourceManager = new LocalResourceManager(JFaceResources.getResources());
-            }
-            return resourceManager;
-        }
+		}
 
-    }
-    
-    
-    class MyFilter extends ViewerFilter{
-    	  @Override
-    	  public boolean select(Viewer viewer, Object parentElement, Object element){
-    		  if (element instanceof AbstractStatistic)
-    				return true;
-    			
-    		  DirecroryStructure direcroryStructure = (DirecroryStructure)element;
-    		  return direcroryStructure.m_amountOfFiles != 0;
-    		/*  
-    	    else {
-    	      StructuredViewer sviewer = (StructuredViewer) viewer;
-    	      ITreeContentProvider provider = (ITreeContentProvider) sviewer.getContentProvider();
-    	      for (Object child: provider.getChildren(element)){
-    	        if (select(viewer, element, child))
-    	          return true;
-    	      }
-    	      return false;
-    	    }*/
-    	  }
-    	}
+		// установка изображения ждя файла
+		@Override
+		public Image getImage(Object element)
+		{
+			return element instanceof DirecroryStructure
+					? getResourceManager().createImage(directoryImage)
+					: getResourceManager().createImage(fileImage);
+		}
+
+		// очищение ресурсов
+		@Override
+		public void dispose()
+		{
+			// garbage collection system resources
+			if(resourceManager != null)
+			{
+				resourceManager.dispose();
+
+				resourceManager = null;
+			}
+		}
+
+		// выделение ресурсов
+		protected ResourceManager getResourceManager()
+		{
+			if(resourceManager == null)
+			{
+				resourceManager = new LocalResourceManager(JFaceResources.getResources());
+			}
+			return resourceManager;
+		}
+
+	}
+
+	class FilterEmptyFolders extends ViewerFilter
+	{
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element)
+		{
+			if(element instanceof AbstractStatistic)
+				return true;
+
+			DirecroryStructure direcroryStructure = (DirecroryStructure) element;
+			return direcroryStructure.m_amountOfFiles != 0;
+		}
+	}
 }

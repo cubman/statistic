@@ -5,10 +5,10 @@ import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin
 {
-	public static Activator INSTANCE;
+	public static Activator		INSTANCE;
 
-	public final static String PLUGIN_ID = "com.statistic.count";
-	
+	public final static String	PLUGIN_ID	= "com.statistic.count";
+
 	public Activator()
 	{
 		// TODO Auto-generated constructor stub
@@ -21,7 +21,7 @@ public class Activator extends AbstractUIPlugin
 		INSTANCE = this;
 		System.out.println("Activator.start()");
 	}
-	
+
 	@Override
 	public void stop(BundleContext a_context) throws Exception
 	{

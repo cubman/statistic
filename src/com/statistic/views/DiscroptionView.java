@@ -25,61 +25,45 @@ import com.statistic.file.viewer.IFormatViewer;
 public class DiscroptionView extends ViewPart
 {
 
-	public static String ID = "com.statistic.count.discription";
+	public static String	ID	= "com.statistic.count.discription";
 
-	TableViewer m_tableViewer;
-	Table m_table;
-	public IFormatViewer m_iTableViewer;
-	
+	public TableViewer		m_tableViewer;
+	public IFormatViewer	m_iTableViewer;
+
 	public DiscroptionView()
 	{
 		// TODO Auto-generated constructor stub
 	}
 
-	 private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
-	        final TableViewerColumn viewerColumn = new TableViewerColumn(m_tableViewer, SWT.NONE);
-	        final TableColumn column = viewerColumn.getColumn();
-	        column.setText(title);
-	        column.setWidth(bound);
-	        column.setResizable(true);
-	        column.setMoveable(true);
-	        return viewerColumn;
-	    }
-	 
 	@Override
 	public void createPartControl(Composite a_parent)
 	{
-		m_tableViewer = new TableViewer(a_parent, SWT.H_SCROLL | SWT.V_SCROLL);
-		
-		m_table = m_tableViewer.getTable();
-		m_table.setLinesVisible (true);
-		m_table.setHeaderVisible (true);
-		m_table.removeAll();
-		
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-		data.heightHint = 200;
-		m_table.setLayoutData(data);
-		
-		String[] titles = {" ", "Наименование", "Описание"};
-		
-		for (int i=0; i<titles.length; i++) {
-			TableColumn column = new TableColumn (m_table, SWT.NONE);
-			column.setText (titles [i]);
+		m_tableViewer = new TableViewer(a_parent,
+				SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.SINGLE);
+
+		Table m_table = m_tableViewer.getTable();
+		m_table.setLinesVisible(true);
+		m_table.setHeaderVisible(true);
+
+		String[] titles = { "Наименование", "Описание" };
+
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn tableColumn = new TableColumn(m_table, SWT.LEFT);
+			tableColumn.setText(titles[i]);
+			tableColumn.setWidth(250);
 		}
 	}
 
 	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics)
 	{
-		m_iTableViewer.setAndPrintDirectory(a_abstractStatistics, m_table);
+		m_iTableViewer.setAndPrintDirectory(a_abstractStatistics);
 	}
-	
+
 	public void printFileStatistic(AbstractStatistic a_statistic)
 	{
-		m_iTableViewer.setAndPrintFolder(a_statistic, m_table);
-		
-		
+		m_iTableViewer.setAndPrintFolder(a_statistic);
 	}
-	
+
 	@Override
 	public void setFocus()
 	{

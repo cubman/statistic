@@ -9,15 +9,17 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
+import com.statistic.table.StatisticStructure;
+
 public abstract class AbstractStatistic
 {
 	// статистика
-	List<Object>	m_statisticForDirectory	= new ArrayList<>();
+	Map<String, StatisticStructure>	m_statisticForDirectory	= new HashMap();
 	// статистика
-	List<Object>	m_statisticForFile		= new ArrayList();
+	Map<String, StatisticStructure>	m_statisticForFile		= new HashMap();
 
 	// файл с указанным форматом
-	File					file;
+	File			file;
 
 	// конструктор
 	public AbstractStatistic(File a_file)
@@ -26,13 +28,13 @@ public abstract class AbstractStatistic
 	}
 
 	// получить статистику общую в поиске директорий
-	public List<Object> getDirectoryStatistc()
+	public Map<String, StatisticStructure> getDirectoryStatistc()
 	{
 		return m_statisticForDirectory;
 	}
 
 	// получить статистику общую о файле
-	public List<Object> getFileStatistc()
+	public Map<String, StatisticStructure> getFileStatistc()
 	{
 		return m_statisticForFile;
 	}

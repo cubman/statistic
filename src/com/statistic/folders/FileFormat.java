@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.TableViewer;
+
 import com.statistic.file.count.AbstractStatistic;
 import com.statistic.file.count.JavaStatistic;
 import com.statistic.file.count.XmlStatistic;
@@ -69,12 +71,12 @@ public enum FileFormat
 	}
 	
 	// преобразование к формату класса-статистика
-	public static IFormatViewer toTableViewer(FileFormat a_fileFormat)
+	public static IFormatViewer toTableViewer(FileFormat a_fileFormat, TableViewer a_tableViewer)
 	{
 		switch(a_fileFormat)
 		{
 		case Java:
-			return new JavaViewer();
+			return new JavaViewer(a_tableViewer);
 		
 		case Xml  :
 			return new XmlViewer();
