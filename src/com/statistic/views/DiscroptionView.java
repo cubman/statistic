@@ -1,22 +1,12 @@
 package com.statistic.views;
 
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.file.count.AbstractStatistic;
@@ -38,6 +28,7 @@ public class DiscroptionView extends ViewPart
 	@Override
 	public void createPartControl(Composite a_parent)
 	{
+		setPartName("Статистика");
 		m_tableViewer = new TableViewer(a_parent,
 				SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.SINGLE);
 
@@ -53,7 +44,12 @@ public class DiscroptionView extends ViewPart
 			tableColumn.setWidth(250);
 		}
 	}
-
+	
+	public void changeName(String a_string)
+	{
+		setPartName(a_string);
+	}
+	
 	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics)
 	{
 		m_iTableViewer.setAndPrintDirectory(a_abstractStatistics);

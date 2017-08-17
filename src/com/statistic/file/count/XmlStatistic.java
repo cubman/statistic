@@ -1,10 +1,6 @@
 package com.statistic.file.count;
 
 import java.io.File;
-import java.util.Map;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 
 public class XmlStatistic extends AbstractStatistic
 {

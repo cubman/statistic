@@ -1,7 +1,5 @@
 package com.statistic.table;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-
 public class StatisticStructure
 {
 	String m_ID;

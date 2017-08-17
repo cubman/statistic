@@ -1,26 +1,18 @@
 package com.statistic.folders;
 
-import java.net.URL;
-
 import javax.annotation.PostConstruct;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
+import com.statistic.count.Activator;
 import com.statistic.file.count.AbstractStatistic;
 import com.statistic.file.viewer.IFormatViewer;
 
@@ -52,9 +44,8 @@ public class FileBrowser
 	// изображение директории
 	private ImageDescriptor createImageOfDirectory()
 	{
-		Bundle bundle = FrameworkUtil.getBundle(ViewLabelProvider.class);
-		URL url = FileLocator.find(bundle, new Path("icons/folder.png"), null);
-		return ImageDescriptor.createFromURL(url);
+		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt",
+				"/icons/full/obj16/fldr_obj.gif");
 	}
 
 	// изображение файла

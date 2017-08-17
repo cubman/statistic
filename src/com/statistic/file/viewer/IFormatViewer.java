@@ -3,8 +3,6 @@ package com.statistic.file.viewer;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.Table;
 
 import com.statistic.file.count.AbstractStatistic;
 

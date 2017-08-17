@@ -1,7 +1,6 @@
 package com.statistic.folders;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
@@ -9,7 +8,6 @@ import com.statistic.file.count.AbstractStatistic;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DirecroryStructure implements ITreeContentProvider
 {
@@ -28,16 +26,19 @@ public class DirecroryStructure implements ITreeContentProvider
 	// наименование директории
 	public String					m_directoryName;
 
+	// полный путь до папки
+	public String fullPath;
+	
 	// создание дерева папок
 	public static DirecroryStructure createDirectory(File head, FileFormat a_fileFormat)
 	{
 		DirecroryStructure direcroryStructure = new DirecroryStructure();
 		direcroryStructure.m_directoryName = head.getName();
-
+		direcroryStructure.fullPath = head.getAbsolutePath();
+		
 		if(head.isDirectory())
-		{
 			search(head, direcroryStructure, a_fileFormat);
-		}
+		
 
 		return direcroryStructure;
 	}
@@ -57,12 +58,13 @@ public class DirecroryStructure implements ITreeContentProvider
 			{
 				for(File temp : listFile)
 				{
-					if(temp.isDirectory())
+					if(temp.isDirectory() && !a_file.getName().startsWith("."))
 					{
 						// оформление структуры
 						DirecroryStructure child = new DirecroryStructure();
 						child.m_parent = a_direcroryStructure;
 						child.m_directoryName = temp.getName();
+						child.fullPath = temp.getAbsolutePath();
 						a_direcroryStructure.m_lds.add(child);
 						// подсчет количества папок содержащих файлы
 						a_direcroryStructure.m_amountOfFiles += search(temp, child, a_fileFormat);
@@ -143,19 +145,22 @@ public class DirecroryStructure implements ITreeContentProvider
 	public static List<AbstractStatistic> getStatisticForSelectedFolder(
 			DirecroryStructure a_direcroryStructure)
 	{
-		List<AbstractStatistic> result = new ArrayList();
-		countStatisticForDirectory(a_direcroryStructure, result);
+		List<AbstractStatistic> result = new ArrayList<>();
+		countStatisticForDirectory(a_direcroryStructure, result, a_direcroryStructure.fullPath);
 
 		return result;
 	}
 
 	// коммулята всех файлов в указанной директории
 	private static void countStatisticForDirectory(DirecroryStructure a_direcroryStructure,
-			List<AbstractStatistic> a_statistic)
+			List<AbstractStatistic> a_statistic, String startedPath)
 	{
 		for(DirecroryStructure direcroryStructure : a_direcroryStructure.m_lds)
-			countStatisticForDirectory(direcroryStructure, a_statistic);
-
+			if (direcroryStructure.m_amountOfFiles > 0)
+				countStatisticForDirectory(direcroryStructure, a_statistic, startedPath);
+		
+		a_direcroryStructure.m_las.stream().forEach(element -> element.setFilePathFrom(startedPath));
+				
 		a_statistic.addAll(a_direcroryStructure.m_las);
 
 	}

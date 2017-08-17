@@ -1,9 +1,6 @@
 package com.statistic.handlers;
 
 import java.io.File;
-import java.nio.file.Paths;
-
-import javax.annotation.Resource;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -15,7 +12,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.omg.CORBA.Environment;
 
 import com.statistic.file.viewer.IFormatViewer;
 import com.statistic.folders.DirecroryStructure;
@@ -34,8 +30,7 @@ public class openDialog extends AbstractHandler implements IHandler
 		// диалоговое окно выбора директории
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 		// путь по умолчанию
-		dialog.setFilterPath(ExplorerView.class.getResource("ExplorerView.class").getPath());// "D:\\EclipseWorkDirectory\\git
-																								// project\\statistic\\src\\com");
+		dialog.setFilterPath("D:\\EclipseWorkDirectory\\gitproject\\statistic\\src\\com");
 
 		// выбранный пользователем каталог(путь к нему)
 		String reString = dialog.open();
@@ -65,10 +60,12 @@ public class openDialog extends AbstractHandler implements IHandler
 						.createDirectory(new File(reString), fileFormat);
 
 				// Файл указанного формата отсутствует
-				if(direcroryStructure == null || direcroryStructure.m_amountOfFiles == 0)
+				if(direcroryStructure == null || direcroryStructure.m_amountOfFiles == 0) {
 					MessageDialog.openWarning(shell, "Предупреждение",
 							"Не было найдено ниодного файла формата "
 									+ FileFormat.toFormat(fileFormat));
+					return null;
+				}
 
 				IFormatViewer tFormatViewer = FileFormat.toTableViewer(fileFormat,
 						discroptionView.m_tableViewer);
@@ -82,6 +79,9 @@ public class openDialog extends AbstractHandler implements IHandler
 
 				// указатель на окно с таблицей результатов
 				explorerView.m_discroptionView = discroptionView;
+				
+				// очистить от старых значений
+				discroptionView.m_tableViewer.getTable().removeAll();
 			}
 			catch(PartInitException e)
 			{

@@ -4,18 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Map;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-
-import com.statistic.count.Activator;
 import com.statistic.table.StatisticStructure;
 
 public class JavaStatistic extends AbstractStatistic

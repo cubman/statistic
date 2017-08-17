@@ -9,18 +9,10 @@ import javax.annotation.PostConstruct;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 
-import com.statistic.file.viewer.IFormatViewer;
-import com.statistic.folders.DirecroryStructure;
-import com.statistic.folders.FileBrowser;
+
 
 public class StatisticBrowser
 {
@@ -43,7 +35,6 @@ public class StatisticBrowser
 
 	class TableViewProvider implements IStructuredContentProvider
 	{
-
 		public Object[] getElements(Object inputElement)
 		{
 			List<StatisticStructure> result = new ArrayList<>();
@@ -53,14 +44,6 @@ public class StatisticBrowser
 				result.add(enter.getValue());
 
 			return result.toArray();
-		}
-
-		public void dispose()
-		{
-		}
-
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
-		{
 		}
 	}
 

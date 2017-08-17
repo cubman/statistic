@@ -1,16 +1,12 @@
 package com.statistic.file.viewer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.w3c.dom.ranges.RangeException;
 
 import com.statistic.count.Activator;
 import com.statistic.file.count.AbstractStatistic;
@@ -42,7 +38,7 @@ public class JavaViewer implements IFormatViewer
 		// самый большой фаил
 		AbstractStatistic theBiggestFile = null;
 
-		int count = 0, bigFile = -1;
+		int bigFile = -1;
 		double badCommented = Double.MAX_VALUE;
 		int allLines = 0, codeLines = 0, commentLine = 0;
 
@@ -58,7 +54,7 @@ public class JavaViewer implements IFormatViewer
 					.getValue(),
 					codeLinesLoc = (int) statisticValue.get(JavaStatistic.CODE_LINES_DIRECTORY)
 							.getValue(),
-					commentLinesLoc = (int) statisticValue.get(JavaStatistic.CODE_LINES_DIRECTORY)
+					commentLinesLoc = (int) statisticValue.get(JavaStatistic.COMMENT_LINES_DIRECTORY)
 							.getValue();
 
 			// сбор данных о текущем файле
@@ -79,7 +75,7 @@ public class JavaViewer implements IFormatViewer
 			badFormatedFile = abstractStatistic;
 		}
 
-		Map<String, StatisticStructure> resStat = new HashMap<>();
+		Map<String, StatisticStructure> resStat = new LinkedHashMap<>();
 		
 		resStat.put(JavaStatistic.ALL_LINES_DIRECTORY, new StatisticStructure(
 				JavaStatistic.ALL_LINES_DIRECTORY, "Общее количество строк", allLines));
@@ -95,11 +91,11 @@ public class JavaViewer implements IFormatViewer
 				commentLine == 0 ? "Комментарии отсутствуют" : (double) codeLines / commentLine));
 		
 		resStat.put(THE_BIGGEST_FILE_DIRECTORY, new StatisticStructure(THE_BIGGEST_FILE_DIRECTORY,
-				"Самый большой файл", theBiggestFile.getShortFileName()));
+				"Самый большой файл", theBiggestFile.comeFromPath()));
 		
 		resStat.put(WORST_COMMENTED_FILE_DIRECTORY,
 				new StatisticStructure(WORST_COMMENTED_FILE_DIRECTORY,
-						"Плохооткомментированный файл", badFormatedFile.getShortFileName()));
+						"Плохооткомментированный файл", badFormatedFile.comeFromPath()));
 
 		new StatisticBrowser(m_tableViewer).createControls(resStat);
 	}
@@ -107,7 +103,8 @@ public class JavaViewer implements IFormatViewer
 	@Override
 	public void setAndPrintFolder(AbstractStatistic a_list)
 	{
-		Map<String, StatisticStructure> statisticValue = new HashMap(a_list.getFileStatistc());
+		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(a_list.getFileStatistc());
+		
 		statisticValue.put(COMMENT_TO_CODE_RATE_FILE, new StatisticStructure(
 				COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",
 				Double.valueOf((int) statisticValue.get(JavaStatistic.CODE_LINES_FILE).getValue())
@@ -119,8 +116,9 @@ public class JavaViewer implements IFormatViewer
 	@Override
 	public ImageDescriptor getFileImage()
 	{
-		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt",
-				"/icons/full/obj16/fldr_obj.gif");
+
+			return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/formatter-java.gif");// ImageDescriptor.createFromURL(new URL("\\icons\\formatter-java.gif"));
+
 	}
 
 }
