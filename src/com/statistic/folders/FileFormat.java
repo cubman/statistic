@@ -16,8 +16,8 @@ import com.statistic.file.viewer.XmlViewer;
 public enum FileFormat
 {
 	// Java | Xml
-	   Java , Xml;
-	
+	Java, Xml;
+
 	// преобразование к текстовому виду
 	public static FileFormat toString(String foramt)
 	{
@@ -25,17 +25,16 @@ public enum FileFormat
 		{
 		case ".java":
 			return FileFormat.Java;
-		
-			case ".xml" :
-				return Xml;
+
+		case ".xml":
+			return Xml;
 
 		default:
 			System.out.println("Format was not recognised");
 			return null;
 		}
 	}
-	
-			
+
 	// преобразование к формату перечисления
 	public static String toFormat(FileFormat a_fileFormat)
 	{
@@ -43,8 +42,8 @@ public enum FileFormat
 		{
 		case Java:
 			return ".java";
-		
-		case Xml  :
+
+		case Xml:
 			return ".xml";
 
 		default:
@@ -52,7 +51,7 @@ public enum FileFormat
 			return null;
 		}
 	}
-	
+
 	// преобразование к формату класса-статистика
 	public static AbstractStatistic toAbstractStatistic(FileFormat a_fileFormat, File a_file)
 	{
@@ -60,8 +59,8 @@ public enum FileFormat
 		{
 		case Java:
 			return new JavaStatistic(a_file);
-		
-		case Xml  :
+
+		case Xml:
 			return new XmlStatistic(a_file);
 
 		default:
@@ -69,7 +68,7 @@ public enum FileFormat
 			return null;
 		}
 	}
-	
+
 	// преобразование к формату класса-статистика
 	public static IFormatViewer toTableViewer(FileFormat a_fileFormat, TableViewer a_tableViewer)
 	{
@@ -77,8 +76,8 @@ public enum FileFormat
 		{
 		case Java:
 			return new JavaViewer(a_tableViewer);
-		
-		case Xml  :
+
+		case Xml:
 			return new XmlViewer();
 
 		default:
@@ -86,7 +85,7 @@ public enum FileFormat
 			return null;
 		}
 	}
-	
+
 	// Возвращает список доступных расширений
 	public static List<FileFormat> getAllPossibleFileFormat()
 	{

@@ -12,10 +12,9 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 
-
-
 public class StatisticBrowser
 {
+	// таблица результатов
 	TableViewer m_tableViewer;
 
 	public StatisticBrowser(TableViewer a_tableViewer)
@@ -27,12 +26,15 @@ public class StatisticBrowser
 	@PostConstruct
 	public void createControls(Map<String, StatisticStructure> a_statisct)
 	{
+		// обновить данные
 		m_tableViewer.refresh();
+
 		m_tableViewer.setContentProvider(new TableViewProvider());
 		m_tableViewer.setLabelProvider(new StatisticView());
 		m_tableViewer.setInput(a_statisct);
 	}
 
+	// полуить данные из словаря
 	class TableViewProvider implements IStructuredContentProvider
 	{
 		public Object[] getElements(Object inputElement)
@@ -47,6 +49,7 @@ public class StatisticBrowser
 		}
 	}
 
+	// отображение статистики
 	public class StatisticView implements ITableLabelProvider
 	{
 

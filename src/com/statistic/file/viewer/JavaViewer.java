@@ -1,6 +1,5 @@
 package com.statistic.file.viewer;
 
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +53,8 @@ public class JavaViewer implements IFormatViewer
 					.getValue(),
 					codeLinesLoc = (int) statisticValue.get(JavaStatistic.CODE_LINES_DIRECTORY)
 							.getValue(),
-					commentLinesLoc = (int) statisticValue.get(JavaStatistic.COMMENT_LINES_DIRECTORY)
-							.getValue();
+					commentLinesLoc = (int) statisticValue
+							.get(JavaStatistic.COMMENT_LINES_DIRECTORY).getValue();
 
 			// сбор данных о текущем файле
 			allLines += allLinesLoc;
@@ -75,50 +74,58 @@ public class JavaViewer implements IFormatViewer
 			badFormatedFile = abstractStatistic;
 		}
 
+		// заполнение выходных данных
 		Map<String, StatisticStructure> resStat = new LinkedHashMap<>();
-		
+
 		resStat.put(JavaStatistic.ALL_LINES_DIRECTORY, new StatisticStructure(
 				JavaStatistic.ALL_LINES_DIRECTORY, "Общее количество строк", allLines));
-		
+
 		resStat.put(JavaStatistic.CODE_LINES_DIRECTORY, new StatisticStructure(
 				JavaStatistic.CODE_LINES_DIRECTORY, "Строки кода", codeLines));
-		
+
 		resStat.put(JavaStatistic.COMMENT_LINES_DIRECTORY, new StatisticStructure(
 				JavaStatistic.COMMENT_LINES_DIRECTORY, "Комментирующие строки", commentLine));
-		
+
 		resStat.put(COMMENT_TO_CODE_RATE_DIRECTORY, new StatisticStructure(
 				COMMENT_TO_CODE_RATE_DIRECTORY, "Отношение кода к комментариям",
 				commentLine == 0 ? "Комментарии отсутствуют" : (double) codeLines / commentLine));
-		
+
 		resStat.put(THE_BIGGEST_FILE_DIRECTORY, new StatisticStructure(THE_BIGGEST_FILE_DIRECTORY,
 				"Самый большой файл", theBiggestFile.comeFromPath()));
-		
+
 		resStat.put(WORST_COMMENTED_FILE_DIRECTORY,
 				new StatisticStructure(WORST_COMMENTED_FILE_DIRECTORY,
-						"Плохооткомментированный файл", badFormatedFile.comeFromPath()));
+						"Плохо откомментированный файл", badFormatedFile.comeFromPath()));
 
+		// отображение данных на экране статистики
 		new StatisticBrowser(m_tableViewer).createControls(resStat);
 	}
 
 	@Override
 	public void setAndPrintFolder(AbstractStatistic a_list)
 	{
-		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(a_list.getFileStatistc());
-		
+		// заполнение выходных данных
+		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(
+				a_list.getFileStatistc());
+
 		statisticValue.put(COMMENT_TO_CODE_RATE_FILE, new StatisticStructure(
 				COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",
-				Double.valueOf((int) statisticValue.get(JavaStatistic.CODE_LINES_FILE).getValue())
-						/ (int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE).getValue()));
+				(int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE).getValue() == 0
+						? "Комментарии отсутствуют"
+						: Double.valueOf(
+								(int) statisticValue.get(JavaStatistic.CODE_LINES_FILE).getValue())
+								/ (int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE)
+										.getValue()));
 
+		// отображение данных на экране статистики
 		new StatisticBrowser(m_tableViewer).createControls(statisticValue);
 	}
 
 	@Override
 	public ImageDescriptor getFileImage()
 	{
-
-			return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/formatter-java.gif");// ImageDescriptor.createFromURL(new URL("\\icons\\formatter-java.gif"));
-
+		return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+				"/icons/formatter-java.gif");
 	}
 
 }

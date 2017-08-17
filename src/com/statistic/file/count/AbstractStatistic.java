@@ -59,6 +59,7 @@ public abstract class AbstractStatistic
 		return comeFrom == null ? getShortFileName() : file.getAbsolutePath().substring(comeFrom.length());
 	}
 	
+	// инициализировать стартовую директорию (при поиске используетсяs)
 	public void setFilePathFrom(String a_string)
 	{
 		comeFrom = a_string;

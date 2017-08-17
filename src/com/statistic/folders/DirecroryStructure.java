@@ -156,11 +156,14 @@ public class DirecroryStructure implements ITreeContentProvider
 			List<AbstractStatistic> a_statistic, String startedPath)
 	{
 		for(DirecroryStructure direcroryStructure : a_direcroryStructure.m_lds)
+			// если есть потомки
 			if (direcroryStructure.m_amountOfFiles > 0)
 				countStatisticForDirectory(direcroryStructure, a_statistic, startedPath);
 		
+		// инициализировать стартовыой директорией
 		a_direcroryStructure.m_las.stream().forEach(element -> element.setFilePathFrom(startedPath));
 				
+		// добавление в выходной массив структуру файла
 		a_statistic.addAll(a_direcroryStructure.m_las);
 
 	}

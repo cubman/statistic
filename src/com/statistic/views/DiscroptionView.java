@@ -38,23 +38,26 @@ public class DiscroptionView extends ViewPart
 
 		String[] titles = { "Наименование", "Описание" };
 
-		for(int i = 0; i < titles.length; i++) {
+		for(int i = 0; i < titles.length; i++)
+		{
 			TableColumn tableColumn = new TableColumn(m_table, SWT.LEFT);
 			tableColumn.setText(titles[i]);
 			tableColumn.setWidth(250);
 		}
 	}
-	
+
 	public void changeName(String a_string)
 	{
 		setPartName(a_string);
 	}
-	
+
+	// отобразить статистику для директории
 	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics)
 	{
 		m_iTableViewer.setAndPrintDirectory(a_abstractStatistics);
 	}
 
+	// отобразить статистику по файлу
 	public void printFileStatistic(AbstractStatistic a_statistic)
 	{
 		m_iTableViewer.setAndPrintFolder(a_statistic);

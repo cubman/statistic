@@ -34,7 +34,7 @@ public class FileBrowser
 			IFormatViewer a_formatViewer)
 	{
 		viewer.setContentProvider(a_direcroryStructure);
-		
+
 		viewer.setLabelProvider(
 				new ViewLabelProvider(createImageOfDirectory(), createImageOfFile(a_formatViewer)));
 		viewer.setFilters(new FilterEmptyFolders());
@@ -123,6 +123,7 @@ public class FileBrowser
 
 	}
 
+	// фильтровать папки, выводимые на экран
 	class FilterEmptyFolders extends ViewerFilter
 	{
 		@Override

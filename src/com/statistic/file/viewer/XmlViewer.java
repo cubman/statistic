@@ -27,8 +27,8 @@ public class XmlViewer implements IFormatViewer
 	@Override
 	public ImageDescriptor getFileImage()
 	{
-		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt",
-				"/icons/full/obj16/fldr_obj.gif");
+		return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+				"/icons/xmldoc.gif");
 	}
 
 }

@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.statistic.count.Activator;
 import com.statistic.file.viewer.IFormatViewer;
 import com.statistic.folders.DirecroryStructure;
 import com.statistic.folders.FileBrowser;
@@ -30,7 +31,7 @@ public class openDialog extends AbstractHandler implements IHandler
 		// диалоговое окно выбора директории
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 		// путь по умолчанию
-		dialog.setFilterPath("D:\\EclipseWorkDirectory\\gitproject\\statistic\\src\\com");
+		dialog.setFilterPath("D:\\EclipseWorkDirectory");
 
 		// выбранный пользователем каталог(путь к нему)
 		String reString = dialog.open();
@@ -60,26 +61,29 @@ public class openDialog extends AbstractHandler implements IHandler
 						.createDirectory(new File(reString), fileFormat);
 
 				// Файл указанного формата отсутствует
-				if(direcroryStructure == null || direcroryStructure.m_amountOfFiles == 0) {
+				if(direcroryStructure == null || direcroryStructure.m_amountOfFiles == 0)
+				{
 					MessageDialog.openWarning(shell, "Предупреждение",
 							"Не было найдено ниодного файла формата "
 									+ FileFormat.toFormat(fileFormat));
 					return null;
 				}
 
+				// таблица вывода
 				IFormatViewer tFormatViewer = FileFormat.toTableViewer(fileFormat,
 						discroptionView.m_tableViewer);
-				
+
 				// инициализация дерева
 				discroptionView.m_iTableViewer = tFormatViewer;
 
 				// обозреватель файлов, формирующий структуру
 				FileBrowser fileBrowser = new FileBrowser(explorerView.aTreeViewer);
+				// вывод директорий и папок
 				fileBrowser.createControls(direcroryStructure, tFormatViewer);
 
 				// указатель на окно с таблицей результатов
 				explorerView.m_discroptionView = discroptionView;
-				
+
 				// очистить от старых значений
 				discroptionView.m_tableViewer.getTable().removeAll();
 			}
