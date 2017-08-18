@@ -2,7 +2,7 @@ package com.statistic.fileformat.xml;
 
 import java.io.File;
 
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 
 public class XmlStatistic extends AbstractStatistic
 {

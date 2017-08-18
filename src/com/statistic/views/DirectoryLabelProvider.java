@@ -7,7 +7,7 @@ import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.folders.DirecroryStructure;
 
 // клсс иконка - текст файла

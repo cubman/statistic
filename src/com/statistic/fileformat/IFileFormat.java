@@ -2,9 +2,6 @@ package com.statistic.fileformat;
 
 import java.io.File;
 
-import com.statistic.file.count.AbstractStatistic;
-import com.statistic.file.viewer.IFormatViewer;
-
 /**
 	требование к формату поиска
  */

@@ -2,9 +2,9 @@ package com.statistic.fileformat.java;
 
 import java.io.File;
 
-import com.statistic.file.count.AbstractStatistic;
-import com.statistic.file.viewer.IFormatViewer;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
+import com.statistic.fileformat.IFormatViewer;
 
 public class JavaFormat implements IFileFormat
 {

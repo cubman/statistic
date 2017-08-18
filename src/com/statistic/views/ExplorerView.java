@@ -13,11 +13,9 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.count.Activator;
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.FileFormatManager;
 import com.statistic.fileformat.IFileFormat;
-import com.statistic.fileformat.java.JavaFormat;
-import com.statistic.fileformat.xml.XmlFormat;
 import com.statistic.folders.DirecroryStructure;
 
 public class ExplorerView extends ViewPart
@@ -69,10 +67,6 @@ public class ExplorerView extends ViewPart
 		m_spinner.setMaximum(200);
 
 		m_spinner.setToolTipText("Минимальное значение строковых код");
-
-		// формирование статистики менедера
-		m_fileFormatManager.addFormat(new JavaFormat());
-		m_fileFormatManager.addFormat(new XmlFormat());
 		
 		// двойное нажатие на папку
 		m_treeViewer.addDoubleClickListener(listener ->

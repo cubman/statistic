@@ -3,6 +3,10 @@ package com.statistic.count;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.statistic.fileformat.FileFormatManager;
+import com.statistic.fileformat.java.JavaFormat;
+import com.statistic.fileformat.xml.XmlFormat;
+
 public class Activator extends AbstractUIPlugin
 {
 	public static Activator		INSTANCE;
@@ -20,6 +24,11 @@ public class Activator extends AbstractUIPlugin
 		super.start(a_context);
 		INSTANCE = this;
 		System.out.println("Activator.start()");
+		
+		FileFormatManager fileFormatManager = FileFormatManager.getInstance();
+		// формирование статистики менедера
+		fileFormatManager.addFormat(new JavaFormat());
+		fileFormatManager.addFormat(new XmlFormat());
 	}
 
 	@Override

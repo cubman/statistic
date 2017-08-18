@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.folders.DirecroryStructure;
 
 public class DirectoryContentProvider implements ITreeContentProvider

@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
 import com.statistic.table.StatisticStructure;
 

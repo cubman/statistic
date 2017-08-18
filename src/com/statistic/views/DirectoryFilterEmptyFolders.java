@@ -3,7 +3,7 @@ package com.statistic.views;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.folders.DirecroryStructure;
 
 //фильтровать папки, выводимые на экран

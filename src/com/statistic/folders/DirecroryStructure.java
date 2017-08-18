@@ -2,7 +2,7 @@ package com.statistic.folders;
 
 import java.util.List;
 
-import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
 
 import java.io.File;

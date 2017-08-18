@@ -1,4 +1,4 @@
-package com.statistic.file.count;
+package com.statistic.fileformat;
 
 import java.io.File;
 import java.util.HashMap;

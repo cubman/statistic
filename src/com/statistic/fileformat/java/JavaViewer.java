@@ -7,8 +7,8 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.statistic.count.Activator;
-import com.statistic.file.count.AbstractStatistic;
-import com.statistic.file.viewer.IFormatViewer;
+import com.statistic.fileformat.AbstractStatistic;
+import com.statistic.fileformat.IFormatViewer;
 import com.statistic.table.StatisticStructure;
 
 public class JavaViewer implements IFormatViewer
