@@ -68,10 +68,8 @@ public class OpenDialog extends AbstractHandler implements IHandler
 				//IFormatViewer tFormatViewer = FileFormat.toTableViewer(fileFormat);
 
 				// инициализация дерева
-				//discroptionView.setFormatViewer(tFormatViewer);
-
+				discroptionView.setFormatViewer(explorerView.getFormatViewer());
 				
-
 				// указатель на окно с таблицей результатов
 				explorerView.setDescriptionView(discroptionView);
 				

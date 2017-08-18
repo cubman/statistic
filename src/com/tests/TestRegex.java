@@ -18,7 +18,9 @@ public class TestRegex
 	public void test()
 	{
 		JavaStatistic javaStatistic = new JavaStatistic(new File(
-				"D:\\EclipseWorkDirectory\\git project\\statistic\\src\\com\\tests\\AbstractStatistic.java"));
+				"D:\\EclipseWorkDirectory\\git project\\statistic\\src\\com\\tests\\JavaViewer.java"));
+		
+		javaStatistic.countStatistic();
 		String s = "humbapumpa jim";
 		assertTrue(s.matches(".*(jim|joe).*"));
 

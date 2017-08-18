@@ -21,7 +21,7 @@ public class XmlViewer implements IFormatViewer
 
 	@Override
 	public Map<String, StatisticStructure> getCountedDirectoryStatistic(
-			List<AbstractStatistic> a_list)
+			List<AbstractStatistic> a_list, int a_minCodeLines)
 	{
 		// TODO Auto-generated method stub
 		return null;

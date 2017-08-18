@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
@@ -28,6 +29,7 @@ public class ExplorerView extends ViewPart
 	private Combo			m_comboDropDown;
 	private DescriptionView	m_descriptionView;
 	private IFormatViewer	m_iFormatViewer;
+	private Spinner			m_spinner;
 
 	public ExplorerView()
 	{
@@ -39,25 +41,35 @@ public class ExplorerView extends ViewPart
 	{
 		setPartName("Обозреватель папок");
 
-		GridLayout layout = new GridLayout(1, true);
+		GridLayout layout = new GridLayout(2, false);
 		a_parent.setLayout(layout);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-
+		gridData.horizontalSpan = 2;
 		m_treeViewer = new TreeViewer(a_parent,
 				SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.SINGLE);
+
 		m_treeViewer.setContentProvider(new DirectoryContentProvider());
 		m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
-
-		m_comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER);
-
 		Tree aTree = m_treeViewer.getTree();
 		aTree.setLayoutData(gridData);
-
-		gridData = new GridData(SWT.FILL, SWT.BOTTOM, true, false);
+		
+		m_comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER);
+		
+		gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 
 		m_comboDropDown.setLayoutData(gridData);
 
+		
+		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+
+		m_spinner = new Spinner(a_parent, SWT.BORDER);
+		m_spinner.setIncrement(5);
+		m_spinner.setMinimum(10);
+		m_spinner.setMaximum(200);
+		
+		m_spinner.setToolTipText("Минимальное значение строковых код");
+		
 		// двойное нажатие на папку
 		m_treeViewer.addDoubleClickListener(listener ->
 			{
@@ -77,7 +89,7 @@ public class ExplorerView extends ViewPart
 					DirecroryStructure direcroryStructure = (DirecroryStructure) selectedNode;
 
 					m_descriptionView.printDirectoryStatistic(
-							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure));
+							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure), Integer.parseInt(m_spinner.getText()));
 
 					m_descriptionView.changeName(direcroryStructure.getDirectoryName(),
 							direcroryStructure.getFullDirectoryPath());
@@ -116,6 +128,11 @@ public class ExplorerView extends ViewPart
 	public void setDescriptionView(DescriptionView a_descriptionView)
 	{
 		m_descriptionView = a_descriptionView;
+	}
+
+	public IFormatViewer getFormatViewer()
+	{
+		return m_iFormatViewer;
 	}
 
 	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)

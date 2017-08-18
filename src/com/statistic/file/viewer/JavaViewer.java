@@ -23,9 +23,9 @@ public class JavaViewer implements IFormatViewer
 	public static final String	WORST_COMMENTED_FILE_DIRECTORY	= "java.worstCommentedFileDirectory";
 	public static final String	BEST_COMMENTED_FILE_DIRECTORY	= "java.bestCommentedFileDirectory";
 
-
 	@Override
-	public Map<String, StatisticStructure> getCountedDirectoryStatistic(List<AbstractStatistic> a_list)
+	public Map<String, StatisticStructure> getCountedDirectoryStatistic(
+			List<AbstractStatistic> a_list, int a_minCodeLines)
 	{
 		// самый плохооткомментированный
 		AbstractStatistic badFormatedFile = null;
@@ -35,7 +35,7 @@ public class JavaViewer implements IFormatViewer
 		AbstractStatistic theBiggestFile = null;
 
 		int bigFile = -1;
-		double badCommented = Double.MAX_VALUE, bestCommented = Double.MIN_VALUE;
+		double badCommented = Double.MAX_VALUE, bestCommented = 0.0;
 		int allLines = 0, codeLines = 0, commentLine = 0;
 
 		// для каждой статистики о файле
@@ -66,19 +66,19 @@ public class JavaViewer implements IFormatViewer
 			}
 
 			// самый плохооткомментированный код
-			if(commentLinesLoc == 0 || badCommented > (double) allLinesLoc / commentLinesLoc)
+			if((commentLinesLoc == 0 || badCommented > (double) commentLinesLoc / allLinesLoc) && codeLinesLoc > a_minCodeLines)
 			{
-				badCommented = commentLinesLoc == 0 ? 0 : (double) allLinesLoc / commentLinesLoc;
+				badCommented = commentLinesLoc == 0 ? 0 : (double) commentLinesLoc / allLinesLoc;
 				badFormatedFile = abstractStatistic;
 			}
 
 			// лучшеоткомментированный код
-			if(commentLinesLoc != 0 && bestCommented < (double) allLinesLoc / commentLinesLoc)
+			if(commentLinesLoc != 0 && bestCommented < (double) commentLinesLoc / allLinesLoc && codeLinesLoc > a_minCodeLines)
 			{
-				bestCommented = (double) allLinesLoc / commentLinesLoc;
+				bestCommented = (double) commentLinesLoc / allLinesLoc;
 				bestFormatedFile = abstractStatistic;
 			}
-			//*******************************************
+
 		}
 
 		// заполнение выходных данных
@@ -103,15 +103,17 @@ public class JavaViewer implements IFormatViewer
 
 		resStat.put(WORST_COMMENTED_FILE_DIRECTORY,
 				new StatisticStructure(WORST_COMMENTED_FILE_DIRECTORY,
-						"Плохо откомментированный файл", badFormatedFile.comeFromPath()));
-		
+						"Плохо откомментированный файл",
+						badFormatedFile == null ? "Не было найдено удовлетворяющего условию файла"
+								: badFormatedFile.comeFromPath()));
+
 		resStat.put(BEST_COMMENTED_FILE_DIRECTORY,
 				new StatisticStructure(BEST_COMMENTED_FILE_DIRECTORY,
-						"Лучше всего откомментированный файл", bestFormatedFile.comeFromPath()));
+						"Лучше всего откомментированный файл",
+						bestFormatedFile == null ? "Не было найдено удовлетворяющего условию файла"
+								: bestFormatedFile.comeFromPath()));
 
 		return resStat;
-		// отображение данных на экране статистики
-		//new StatisticBrowser(m_tableViewer).createControls(resStat);
 	}
 
 	@Override

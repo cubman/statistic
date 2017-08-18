@@ -72,9 +72,9 @@ public class DescriptionView extends ViewPart
 	}
 
 	// отобразить статистику для директории
-	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics)
+	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics, int a_minCodeLines)
 	{
-		Map<String, StatisticStructure> dMap = m_iTableViewer.getCountedDirectoryStatistic(a_abstractStatistics);
+		Map<String, StatisticStructure> dMap = m_iTableViewer.getCountedDirectoryStatistic(a_abstractStatistics, a_minCodeLines);
 		m_tableViewer.setInput(dMap);
 	}
 

@@ -35,15 +35,15 @@ public class JavaStatistic extends AbstractStatistic
 
 		m_restriction.put(EMPTY_LINES_FILE, new RestrictionPair(string -> isEmptyString(string)));
 
-		m_restriction.put(INCLUDED_LIBRARY_FILE, new RestrictionPair(true, string -> isImport(string)));
+		m_restriction.put(INCLUDED_LIBRARY_FILE, new RestrictionPair(string -> isImport(string)));
 
 		m_restriction.put(COMMENT_LINES_FILE,
-				new RestrictionPair(true, string -> isSmallComment(string)));
+				new RestrictionPair(true, string -> isAfterTextSmallComment(string)));
 
 		m_restriction.put(AMOUNT_OF_METHODS_FILE, new RestrictionPair(string -> isMethod(string)));
 
 		m_restriction.put(CODE_LINES_FILE, new RestrictionPair(
-				string -> !isOpenBracket(string) && !isCloseBracket(string) && !isPackage(string)));
+				string -> !isOpenBracket(string) && !isCloseBracket(string) && !isPackage(string) && !isOnlySmallComment(string)));
 
 		// инициализация потока чтения
 		try(BufferedReader bufferedReader = new BufferedReader(
@@ -165,7 +165,13 @@ public class JavaStatistic extends AbstractStatistic
 	}
 
 	// однострочный комментарий
-	private boolean isSmallComment(String a_string)
+	private boolean isOnlySmallComment(String a_string)
+	{
+		return a_string.matches("^(\\t|\\s*)//.*");
+	}
+	
+	// однострочный комментарий
+	private boolean isAfterTextSmallComment(String a_string)
 	{
 		return a_string.matches(".*//.*");
 	}
