@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.statistic.file.count.JavaStatistic;
+import com.statistic.fileformat.java.JavaStatistic;
 
 public class TestRegex
 {

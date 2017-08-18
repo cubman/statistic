@@ -1,4 +1,4 @@
-package com.statistic.file.count;
+package com.statistic.fileformat.java;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
+import com.statistic.file.count.AbstractStatistic;
 import com.statistic.table.StatisticStructure;
 
 public class JavaStatistic extends AbstractStatistic
@@ -179,7 +180,7 @@ public class JavaStatistic extends AbstractStatistic
 	// начало многострочного комментария
 	private boolean isBigCommentStart(String a_string)
 	{
-		return a_string.matches(".*/\\*.*");
+		return a_string.matches(".*/\\*\\*.*");
 	}
 
 	// окончание многострочного комментария

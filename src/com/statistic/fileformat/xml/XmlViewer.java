@@ -1,4 +1,4 @@
-package com.statistic.file.viewer;
+package com.statistic.fileformat.xml;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.statistic.count.Activator;
 import com.statistic.file.count.AbstractStatistic;
+import com.statistic.file.viewer.IFormatViewer;
 import com.statistic.table.StatisticStructure;
 
 public class XmlViewer implements IFormatViewer

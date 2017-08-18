@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.file.count.AbstractStatistic;
-import com.statistic.file.viewer.IFormatViewer;
+import com.statistic.fileformat.IFileFormat;
 import com.statistic.table.StatisticStructure;
 
 public class DescriptionView extends ViewPart
@@ -20,7 +20,7 @@ public class DescriptionView extends ViewPart
 	public static String	ID	= "com.statistic.count.description";
 
 	private TableViewer		m_tableViewer;
-	private IFormatViewer	m_iTableViewer;
+	private IFileFormat	m_fileFormat;
 
 	public DescriptionView()
 	{
@@ -60,9 +60,9 @@ public class DescriptionView extends ViewPart
 		return m_tableViewer;
 	}
 	
-	public void setFormatViewer(IFormatViewer a_formatViewer)
+	public void setFormatViewer(IFileFormat a_fileFormat)
 	{
-		m_iTableViewer = a_formatViewer;
+		m_fileFormat = a_fileFormat;
 	}
 	
 	public void changeName(String a_string, String a_toolTipPath)
@@ -74,14 +74,14 @@ public class DescriptionView extends ViewPart
 	// отобразить статистику для директории
 	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics, int a_minCodeLines)
 	{
-		Map<String, StatisticStructure> dMap = m_iTableViewer.getCountedDirectoryStatistic(a_abstractStatistics, a_minCodeLines);
+		Map<String, StatisticStructure> dMap = m_fileFormat.getFormatViewer().getCountedDirectoryStatistic(a_abstractStatistics, a_minCodeLines);
 		m_tableViewer.setInput(dMap);
 	}
 
 	// отобразить статистику по файлу
 	public void printFileStatistic(AbstractStatistic a_statistic)
 	{
-		m_tableViewer.setInput(m_iTableViewer.getCountedFileStatistic(a_statistic));
+		m_tableViewer.setInput(m_fileFormat.getFormatViewer().getCountedFileStatistic(a_statistic));
 	}
 
 	@Override

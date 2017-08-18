@@ -13,9 +13,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.statistic.file.viewer.IFormatViewer;
+import com.statistic.fileformat.IFileFormat;
 import com.statistic.folders.DirecroryStructure;
-import com.statistic.folders.FileFormat;
 import com.statistic.views.DescriptionView;
 import com.statistic.views.ExplorerView;
 
@@ -49,7 +48,7 @@ public class OpenDialog extends AbstractHandler implements IHandler
 						.showView(ExplorerView.ID);
 
 				// выбранный формат
-				FileFormat fileFormat = explorerView.getSelectedFileFormat();
+				IFileFormat fileFormat = explorerView.getFormatViewer();
 
 				// рекурсивно сформированное дерево, с указанным форматом
 				DirecroryStructure direcroryStructure = new DirecroryStructure(
@@ -60,7 +59,7 @@ public class OpenDialog extends AbstractHandler implements IHandler
 				{
 					MessageDialog.openWarning(shell, "Предупреждение",
 							"Не было найдено ниодного файла формата "
-									+ FileFormat.toString(fileFormat));
+									+ fileFormat.toString());
 					return null;
 				}
 
@@ -77,7 +76,7 @@ public class OpenDialog extends AbstractHandler implements IHandler
 				explorerView.fillTreeViewer(direcroryStructure);
 
 				// очистить от старых значений
-				discroptionView.getTableViewer().getTable().removeAll();
+				//discroptionView.getTableViewer().getTable().removeAll();
 			}
 			catch(PartInitException e)
 			{

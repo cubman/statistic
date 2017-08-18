@@ -11,6 +11,7 @@ import com.statistic.table.StatisticStructure;
 //полуить данные из словаря
 public class TableContentProvider implements IStructuredContentProvider
 {
+	@SuppressWarnings("unchecked")
 	public Object[] getElements(Object inputElement)
 	{
 		List<StatisticStructure> result = new ArrayList<>();

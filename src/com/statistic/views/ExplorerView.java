@@ -4,8 +4,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -16,20 +14,23 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.count.Activator;
 import com.statistic.file.count.AbstractStatistic;
-import com.statistic.file.viewer.IFormatViewer;
+import com.statistic.fileformat.FileFormatManager;
+import com.statistic.fileformat.IFileFormat;
+import com.statistic.fileformat.java.JavaFormat;
+import com.statistic.fileformat.xml.XmlFormat;
 import com.statistic.folders.DirecroryStructure;
-import com.statistic.folders.FileFormat;
 
 public class ExplorerView extends ViewPart
 {
 
-	public static String	ID	= "com.statistic.count.Explorer";
+	public static String		ID					= "com.statistic.count.Explorer";
 
-	private TreeViewer		m_treeViewer;
-	private Combo			m_comboDropDown;
-	private DescriptionView	m_descriptionView;
-	private IFormatViewer	m_iFormatViewer;
-	private Spinner			m_spinner;
+	private TreeViewer			m_treeViewer;
+	private Combo				m_comboDropDown;
+	private DescriptionView		m_descriptionView;
+	private FileFormatManager	m_fileFormatManager	= FileFormatManager.getInstance();
+	private IFileFormat		m_iFileFormat;
+	private Spinner				m_spinner;
 
 	public ExplorerView()
 	{
@@ -53,22 +54,25 @@ public class ExplorerView extends ViewPart
 		m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
 		Tree aTree = m_treeViewer.getTree();
 		aTree.setLayoutData(gridData);
-		
-		m_comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER);
-		
+
+		m_comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
+
 		gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 
 		m_comboDropDown.setLayoutData(gridData);
 
-		
 		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
 
 		m_spinner = new Spinner(a_parent, SWT.BORDER);
 		m_spinner.setIncrement(5);
 		m_spinner.setMinimum(10);
 		m_spinner.setMaximum(200);
-		
+
 		m_spinner.setToolTipText("Минимальное значение строковых код");
+
+		// формирование статистики менедера
+		m_fileFormatManager.addFormat(new JavaFormat());
+		m_fileFormatManager.addFormat(new XmlFormat());
 		
 		// двойное нажатие на папку
 		m_treeViewer.addDoubleClickListener(listener ->
@@ -89,7 +93,8 @@ public class ExplorerView extends ViewPart
 					DirecroryStructure direcroryStructure = (DirecroryStructure) selectedNode;
 
 					m_descriptionView.printDirectoryStatistic(
-							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure), Integer.parseInt(m_spinner.getText()));
+							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure),
+							Integer.parseInt(m_spinner.getText()));
 
 					m_descriptionView.changeName(direcroryStructure.getDirectoryName(),
 							direcroryStructure.getFullDirectoryPath());
@@ -110,29 +115,35 @@ public class ExplorerView extends ViewPart
 
 			});
 
-		for(FileFormat fileFormat : FileFormat.getAllPossibleFileFormat())
-			m_comboDropDown.add(FileFormat.toString(fileFormat));
+		// список форматов для поиска
+		for(IFileFormat fileFormat : m_fileFormatManager.getFileFormats())
+			m_comboDropDown.add(fileFormat.toString());
 
+		// выбрали другой формат
 		m_comboDropDown.addListener(SWT.Modify,
-				lis -> m_iFormatViewer = FileFormat.toTableViewer(getSelectedFileFormat()));
+				lis -> m_iFileFormat =  m_fileFormatManager.getFileFormats().get(m_comboDropDown.getSelectionIndex()));
 
+		// выбрали первый по списку
 		m_comboDropDown.select(0);
 
 	}
 
-	public FileFormat getSelectedFileFormat()
+	/*// получить текущий класс обработки
+	public IFileFormat getSelectedFileFormat()
 	{
-		return FileFormat.toFormat(m_comboDropDown.getItem(m_comboDropDown.getSelectionIndex()));
-	}
+		return m_iFileFormat;
+	}*/
 
+	// получить ссылку на окно с таблицей
 	public void setDescriptionView(DescriptionView a_descriptionView)
 	{
 		m_descriptionView = a_descriptionView;
 	}
 
-	public IFormatViewer getFormatViewer()
+	// получить 
+	public IFileFormat getFormatViewer()
 	{
-		return m_iFormatViewer;
+		return m_iFileFormat;
 	}
 
 	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)
@@ -152,7 +163,7 @@ public class ExplorerView extends ViewPart
 	// изображение файла
 	private ImageDescriptor createImageOfFile()
 	{
-		return m_iFormatViewer.getFileImage();
+		return m_iFileFormat.getFormatViewer().getFileImage();
 	}
 
 	@Override

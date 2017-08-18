@@ -1,16 +1,14 @@
-package com.statistic.file.viewer;
+package com.statistic.fileformat.java;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.TableViewer;
 
 import com.statistic.count.Activator;
 import com.statistic.file.count.AbstractStatistic;
-import com.statistic.file.count.JavaStatistic;
-import com.statistic.table.StatisticBrowser;
+import com.statistic.file.viewer.IFormatViewer;
 import com.statistic.table.StatisticStructure;
 
 public class JavaViewer implements IFormatViewer

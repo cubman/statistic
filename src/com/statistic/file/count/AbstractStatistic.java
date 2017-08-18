@@ -11,18 +11,18 @@ import com.statistic.table.StatisticStructure;
 public abstract class AbstractStatistic
 {
 	// статистика
-	Map<String, StatisticStructure>	m_statisticForDirectory	= new HashMap<>();
+	protected Map<String, StatisticStructure>	m_statisticForDirectory	= new HashMap<>();
 	// статистика
-	Map<String, StatisticStructure>	m_statisticForFile		= new HashMap<>();
+	protected Map<String, StatisticStructure>	m_statisticForFile		= new HashMap<>();
 
 	// ограничение 
 	protected Map<String, RestrictionPair> m_restriction = new LinkedHashMap<>();
 	
 	// файл с указанным форматом
-	File			file;
+	protected File			file;
 
 	// Откуда добрались до файла
-	String comeFrom = null;
+	protected String comeFrom = null;
 	
 	// конструктор
 	public AbstractStatistic(File a_file)

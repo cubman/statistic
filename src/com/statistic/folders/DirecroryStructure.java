@@ -2,9 +2,8 @@ package com.statistic.folders;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.ITreeContentProvider;
-
 import com.statistic.file.count.AbstractStatistic;
+import com.statistic.fileformat.IFileFormat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class DirecroryStructure
 	}
 	
 	// создание дерева папок
-	public DirecroryStructure(File head, FileFormat a_fileFormat)
+	public DirecroryStructure(File head, IFileFormat a_fileFormat)
 	{
 		//DirecroryStructure direcroryStructure = new DirecroryStructure();
 		m_directoryName = head.getName();
@@ -85,7 +84,7 @@ public class DirecroryStructure
 	}
 
 	// формирование списка
-	private int search(File a_file, FileFormat a_fileFormat)
+	private int search(File a_file, IFileFormat a_fileFormat)
 	{
 		// если файл - папка
 		if(a_file.isDirectory())
@@ -109,14 +108,14 @@ public class DirecroryStructure
 					}
 					else
 					{
-						// файл имеет указанный формат
-						if(temp.getName().endsWith(FileFormat.toString(a_fileFormat)))
-						{
-							AbstractStatistic abstractStatistic = FileFormat
-									.toAbstractStatistic(a_fileFormat, temp);
-							abstractStatistic.countStatistic();
-							m_listAbstractStatistic.add(abstractStatistic);
-						}
+						for (String format : a_fileFormat.getExtensions())
+							// файл имеет указанный формат
+							if( temp.getName().endsWith(format))
+							{
+								AbstractStatistic abstractStatistic = a_fileFormat.getStatistic(temp);
+								abstractStatistic.countStatistic();
+								m_listAbstractStatistic.add(abstractStatistic);
+							}
 					}
 				}
 				m_amountOfFiles += m_listAbstractStatistic.size();

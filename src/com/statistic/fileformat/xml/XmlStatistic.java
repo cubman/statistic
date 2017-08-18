@@ -1,6 +1,8 @@
-package com.statistic.file.count;
+package com.statistic.fileformat.xml;
 
 import java.io.File;
+
+import com.statistic.file.count.AbstractStatistic;
 
 public class XmlStatistic extends AbstractStatistic
 {

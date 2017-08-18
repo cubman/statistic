@@ -1,0 +1,48 @@
+package com.statistic.fileformat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+ * Хранитель ресурсов
+ */
+public class FileFormatManager
+{
+	// список всех форматов
+	private List<IFileFormat>			m_fileFormats;
+
+	// ссылка на себя(для синглетона)
+	private static FileFormatManager	m_FileFormatManager;
+
+	private FileFormatManager()
+	{
+		m_FileFormatManager = this;
+
+		m_fileFormats = new ArrayList<>();
+	}
+
+	// добавить формат поиска
+	public void addFormat(IFileFormat a_fileFormat)
+	{
+		for(IFileFormat fileFormat : m_fileFormats)
+			if(a_fileFormat.getExtensions().equals(fileFormat))
+				return;
+
+		m_fileFormats.add(a_fileFormat);
+	}
+
+	// получить список форматов
+	public List<IFileFormat> getFileFormats()
+	{
+		return m_fileFormats;
+	}
+
+	// получить экземпляр
+	public static FileFormatManager getInstance()
+	{
+		if (m_FileFormatManager == null)
+			m_FileFormatManager = new FileFormatManager();
+		
+		return m_FileFormatManager;
+	}
+}
