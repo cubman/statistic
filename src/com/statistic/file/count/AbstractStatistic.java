@@ -2,8 +2,9 @@ package com.statistic.file.count;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
+import java.util.function.Predicate;
 
 import com.statistic.table.StatisticStructure;
 
@@ -14,6 +15,9 @@ public abstract class AbstractStatistic
 	// статистика
 	Map<String, StatisticStructure>	m_statisticForFile		= new HashMap<>();
 
+	// ограничение 
+	protected Map<String, RestrictionPair> m_restriction = new LinkedHashMap<>();
+	
 	// файл с указанным форматом
 	File			file;
 
@@ -63,5 +67,41 @@ public abstract class AbstractStatistic
 	public void setFilePathFrom(String a_string)
 	{
 		comeFrom = a_string;
+	}
+	
+	//
+	public class RestrictionPair {
+		int m_value = 0;
+		Predicate<String> m_restriction;
+		boolean m_continueSearch = false;
+
+		public RestrictionPair(Predicate<String> a_predicates) {
+			m_restriction = a_predicates;
+		}
+		
+		public RestrictionPair(Boolean a_continueSearch, Predicate<String> a_predicates) {
+			m_restriction = a_predicates;
+			m_continueSearch = a_continueSearch;
+		}
+		
+		public Predicate<String> getRestriction()
+		{
+			return m_restriction;
+		}
+		
+		public int getValue()
+		{
+			return m_value;
+		}
+		
+		public void addValue()
+		{
+			++m_value;
+		}
+		
+		public boolean getContinueSearch()
+		{
+			return m_continueSearch;
+		}
 	}
 }

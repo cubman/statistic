@@ -9,79 +9,117 @@ import com.statistic.file.count.AbstractStatistic;
 import java.io.File;
 import java.util.ArrayList;
 
-public class DirecroryStructure implements ITreeContentProvider
+public class DirecroryStructure 
 {
 	// ссылка на родителя
-	public DirecroryStructure		m_parent		= null;
+	private DirecroryStructure		m_parent		= null;
 
 	// список дочерних директорий
-	public List<DirecroryStructure>	m_lds			= new ArrayList<>();
+	private List<DirecroryStructure>	m_listDirectoryStructure			= new ArrayList<>();
 
 	// список файлов с форматом
-	public List<AbstractStatistic>	m_las			= new ArrayList<>();
+	private List<AbstractStatistic>	m_listAbstractStatistic			= new ArrayList<>();
 
 	// количество файлов с указанным форматом
-	public int						m_amountOfFiles	= 0;
+	private int						m_amountOfFiles	= 0;
 
 	// наименование директории
-	public String					m_directoryName;
+	private String					m_directoryName;
 
 	// полный путь до папки
-	public String fullPath;
+	private String					m_fullPath;
+
+	// получить количество файлов с указанным форматом
+	public int getAmountOfFile()
+	{
+		return m_amountOfFiles;
+	}
+	
+	// получить наименование директории
+	public String getDirectoryName()
+	{
+		return m_directoryName;
+	}
+	
+	// получить полный путь до папки
+	public String getFullDirectoryPath()
+	{
+		return m_fullPath;
+	}
+	
+	// вернуть предка для папки
+	public DirecroryStructure getParent()
+	{
+		return m_parent;
+	}
+	
+	// получить список подпапок
+	public List<DirecroryStructure> getListDirectoryStructure()
+	{
+		return m_listDirectoryStructure;
+	}
+	
+	// получить список файлов в папке
+	public List<AbstractStatistic> getListAbstractStatistic()
+	{
+		return m_listAbstractStatistic;
+	}
 	
 	// создание дерева папок
-	public static DirecroryStructure createDirectory(File head, FileFormat a_fileFormat)
+	public DirecroryStructure(File head, FileFormat a_fileFormat)
 	{
-		DirecroryStructure direcroryStructure = new DirecroryStructure();
-		direcroryStructure.m_directoryName = head.getName();
-		direcroryStructure.fullPath = head.getAbsolutePath();
-		
-		if(head.isDirectory())
-			search(head, direcroryStructure, a_fileFormat);
-		
+		//DirecroryStructure direcroryStructure = new DirecroryStructure();
+		m_directoryName = head.getName();
+		m_fullPath = head.getAbsolutePath();
 
-		return direcroryStructure;
+		if(head.isDirectory())
+			search(head, a_fileFormat);
+	}
+	
+	private DirecroryStructure(DirecroryStructure a_parent, String a_directoryName, String a_fullPathToDirectory)
+	{
+		m_parent = a_parent;
+		m_directoryName = a_directoryName;
+		m_fullPath = a_fullPathToDirectory;
+		
 	}
 
 	// формирование списка
-	private static int search(File a_file, DirecroryStructure a_direcroryStructure,
-			FileFormat a_fileFormat)
+	private int search(File a_file, FileFormat a_fileFormat)
 	{
 		// если файл - папка
 		if(a_file.isDirectory())
 		{
 			// System.out.println("Searching directory ... " +
 			// a_file.getAbsoluteFile());
-			File [] listFile = a_file.listFiles();
+			File[] listFile = a_file.listFiles();
 			// do you have permission to read this directory?
-			if(a_file.canRead() &&  listFile != null)
+			if(a_file.canRead() && listFile != null)
 			{
 				for(File temp : listFile)
 				{
 					if(temp.isDirectory() && !a_file.getName().startsWith("."))
 					{
 						// оформление структуры
-						DirecroryStructure child = new DirecroryStructure();
-						child.m_parent = a_direcroryStructure;
-						child.m_directoryName = temp.getName();
-						child.fullPath = temp.getAbsolutePath();
-						a_direcroryStructure.m_lds.add(child);
+						DirecroryStructure child = new DirecroryStructure(this, temp.getName(), temp.getAbsolutePath());
+						
+						m_listDirectoryStructure.add(child);
 						// подсчет количества папок содержащих файлы
-						a_direcroryStructure.m_amountOfFiles += search(temp, child, a_fileFormat);
+						m_amountOfFiles += child.search(temp, a_fileFormat);
 					}
 					else
 					{
 						// файл имеет указанный формат
-						if(temp.getName().endsWith(FileFormat.toFormat(a_fileFormat)))
+						if(temp.getName().endsWith(FileFormat.toString(a_fileFormat)))
 						{
 							AbstractStatistic abstractStatistic = FileFormat
 									.toAbstractStatistic(a_fileFormat, temp);
 							abstractStatistic.countStatistic();
-							a_direcroryStructure.m_las.add(abstractStatistic);
+							m_listAbstractStatistic.add(abstractStatistic);
 						}
 					}
 				}
-				a_direcroryStructure.m_amountOfFiles += a_direcroryStructure.m_las.size();
+				m_amountOfFiles += m_listAbstractStatistic.size();
 			}
 			else
 			{
@@ -90,63 +128,17 @@ public class DirecroryStructure implements ITreeContentProvider
 
 		}
 
-		return a_direcroryStructure.m_amountOfFiles;
+		return m_amountOfFiles;
 	}
 
-	// получить все элементы для текущего элемента дерева
-	@Override
-	public Object[] getElements(Object a_inputElement)
-	{
-		DirecroryStructure direcroryStructure = (DirecroryStructure) a_inputElement;
-		ArrayList<Object> ret = new ArrayList<>(direcroryStructure.m_lds);
-
-		ret.addAll(direcroryStructure.m_las);
-
-		return ret.toArray();
-	}
-
-	// получить для корневого дочерние элементы
-	@Override
-	public Object[] getChildren(Object a_parentElement)
-	{
-		DirecroryStructure direcroryStructure = (DirecroryStructure) a_parentElement;
-
-		ArrayList<Object> ret = new ArrayList<>(direcroryStructure.m_lds);
-		ret.addAll(direcroryStructure.m_las);
-
-		return ret.toArray();
-	}
-
-	// получить родительскую ссылку
-	@Override
-	public Object getParent(Object a_element)
-	{
-		if(a_element instanceof AbstractStatistic)
-			return null;
-
-		DirecroryStructure direcroryStructure = (DirecroryStructure) a_element;
-		return direcroryStructure.m_parent;
-	}
-
-	// проверить наличие дочерних узлов
-	@Override
-	public boolean hasChildren(Object a_element)
-	{
-		if(a_element instanceof AbstractStatistic)
-			return false;
-
-		DirecroryStructure direcroryStructure = (DirecroryStructure) a_element;
-		ArrayList<Object> ret = new ArrayList<>(direcroryStructure.m_lds);
-		ret.addAll(direcroryStructure.m_las);
-		return !ret.isEmpty();
-	}
+	
 
 	// получить статистику для директории
 	public static List<AbstractStatistic> getStatisticForSelectedFolder(
 			DirecroryStructure a_direcroryStructure)
 	{
 		List<AbstractStatistic> result = new ArrayList<>();
-		countStatisticForDirectory(a_direcroryStructure, result, a_direcroryStructure.fullPath);
+		countStatisticForDirectory(a_direcroryStructure, result, a_direcroryStructure.m_fullPath);
 
 		return result;
 	}
@@ -155,16 +147,17 @@ public class DirecroryStructure implements ITreeContentProvider
 	private static void countStatisticForDirectory(DirecroryStructure a_direcroryStructure,
 			List<AbstractStatistic> a_statistic, String startedPath)
 	{
-		for(DirecroryStructure direcroryStructure : a_direcroryStructure.m_lds)
+		for(DirecroryStructure direcroryStructure : a_direcroryStructure.m_listDirectoryStructure)
 			// если есть потомки
-			if (direcroryStructure.m_amountOfFiles > 0)
+			if(direcroryStructure.m_amountOfFiles > 0)
 				countStatisticForDirectory(direcroryStructure, a_statistic, startedPath);
-		
+
 		// инициализировать стартовыой директорией
-		a_direcroryStructure.m_las.stream().forEach(element -> element.setFilePathFrom(startedPath));
-				
+		a_direcroryStructure.m_listAbstractStatistic.stream()
+				.forEach(element -> element.setFilePathFrom(startedPath));
+
 		// добавление в выходной массив структуру файла
-		a_statistic.addAll(a_direcroryStructure.m_las);
+		a_statistic.addAll(a_direcroryStructure.m_listAbstractStatistic);
 
 	}
 

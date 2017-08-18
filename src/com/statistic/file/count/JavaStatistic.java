@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 
 import com.statistic.table.StatisticStructure;
 
@@ -29,18 +30,29 @@ public class JavaStatistic extends AbstractStatistic
 	@Override
 	public void countStatistic()
 	{
-		BufferedReader br = null;
-		int allLines = 0, codeLines = 0, commentLines = 0, importLines = 0, emptyLines = 0,
-				methodLines = 0;
+		int allLines = 0;
 		boolean bigComment = false;
-		try
-		{
-			// инициализация потока чтения
-			br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-			// строка в тексте
-			String sCurrentLine;
 
-			while((sCurrentLine = br.readLine()) != null)
+		m_restriction.put(EMPTY_LINES_FILE, new RestrictionPair(string -> isEmptyString(string)));
+
+		m_restriction.put(INCLUDED_LIBRARY_FILE, new RestrictionPair(true, string -> isImport(string)));
+
+		m_restriction.put(COMMENT_LINES_FILE,
+				new RestrictionPair(true, string -> isSmallComment(string)));
+
+		m_restriction.put(AMOUNT_OF_METHODS_FILE, new RestrictionPair(string -> isMethod(string)));
+
+		m_restriction.put(CODE_LINES_FILE, new RestrictionPair(
+				string -> !isOpenBracket(string) && !isCloseBracket(string) && !isPackage(string)));
+
+		// инициализация потока чтения
+		try(BufferedReader bufferedReader = new BufferedReader(
+				new FileReader(file.getAbsolutePath())))
+		{
+			// строка в тексте
+			String currentLine;
+
+			while((currentLine = bufferedReader.readLine()) != null)
 			{
 				/*
 				 * проверка на принадлежность многострочному коментарию пока не
@@ -49,38 +61,31 @@ public class JavaStatistic extends AbstractStatistic
 				 */
 				if(bigComment)
 				{
-					if(isBigCommentEnd(sCurrentLine))
+					if(isBigCommentEnd(currentLine))
 						bigComment = false;
 
-					++commentLines;
+					m_restriction.get(COMMENT_LINES_FILE).addValue();
 				}
 				else
-					if(isBigCommentStart(sCurrentLine))
+					if(isBigCommentStart(currentLine))
 					{
 						bigComment = true;
-						if(isBigCommentEnd(sCurrentLine))
+						if(isBigCommentEnd(currentLine))
 							bigComment = false;
 
-						++commentLines;
+						m_restriction.get(COMMENT_LINES_FILE).addValue();
 					}
-					else
-						if(isEmptyString(sCurrentLine))
-							++emptyLines;
-						else
-							if(isImport(sCurrentLine))
-								++importLines;
-							else
-								if(isSmallComment(sCurrentLine))
-									++commentLines;
-								else
-									if(isMethod(sCurrentLine))
-										++methodLines;
-									else
-										if(!isOpenBracket(sCurrentLine)
-												&& !isCloseBracket(sCurrentLine)
-												&& !isPackage(sCurrentLine))
-											++codeLines;
-
+					else 
+						for(Map.Entry<String, RestrictionPair> mEntry : m_restriction.entrySet())
+							if(mEntry.getValue().getRestriction().test(currentLine))
+							{
+								RestrictionPair restrictionPair = mEntry.getValue();
+								restrictionPair.addValue();
+								
+								if (!restrictionPair.getContinueSearch())
+									break;								
+							}
+					
 				++allLines;
 			}
 
@@ -89,53 +94,50 @@ public class JavaStatistic extends AbstractStatistic
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			try
-			{
-				if(br != null)
-					br.close();
-			}
-			catch(IOException ex)
-			{
-				ex.printStackTrace();
-			}
-
-		}
 
 		// статистика для дирректории
 		m_statisticForDirectory.put(ALL_LINES_DIRECTORY,
 				new StatisticStructure(ALL_LINES_DIRECTORY, "Общее количество строк", allLines));
+
 		m_statisticForDirectory.put(CODE_LINES_DIRECTORY,
-				new StatisticStructure(CODE_LINES_DIRECTORY, "Строки кода", codeLines));
-		m_statisticForDirectory.put(COMMENT_LINES_DIRECTORY, new StatisticStructure(
-				COMMENT_LINES_DIRECTORY, "Комментирующие строки", commentLines));
+				new StatisticStructure(CODE_LINES_DIRECTORY, "Строки кода",
+						m_restriction.get(CODE_LINES_FILE).getValue()));
+
+		m_statisticForDirectory.put(COMMENT_LINES_DIRECTORY,
+				new StatisticStructure(COMMENT_LINES_DIRECTORY, "Комментирующие строки",
+						m_restriction.get(COMMENT_LINES_FILE).getValue()));
 
 		// статистика для конкретного файла
 		m_statisticForFile.put(ALL_LINES_FILE,
 				new StatisticStructure(ALL_LINES_FILE, "Общее количество строк", allLines));
+
 		m_statisticForFile.put(INCLUDED_LIBRARY_FILE, new StatisticStructure(INCLUDED_LIBRARY_FILE,
-				"Подключенные библиотеки", importLines));
-		m_statisticForFile.put(CODE_LINES_FILE,
-				new StatisticStructure(CODE_LINES_FILE, "Строки кода", codeLines));
-		m_statisticForFile.put(COMMENT_LINES_FILE,
-				new StatisticStructure(COMMENT_LINES_FILE, "Комментирующие строки", commentLines));
-		m_statisticForFile.put(EMPTY_LINES_FILE,
-				new StatisticStructure(EMPTY_LINES_FILE, "Пустые строки", emptyLines));
+				"Подключенные библиотеки", m_restriction.get(INCLUDED_LIBRARY_FILE).getValue()));
+
+		m_statisticForFile.put(CODE_LINES_FILE, new StatisticStructure(CODE_LINES_FILE,
+				"Строки кода", m_restriction.get(CODE_LINES_FILE).getValue()));
+
+		m_statisticForFile.put(COMMENT_LINES_FILE, new StatisticStructure(COMMENT_LINES_FILE,
+				"Комментирующие строки", m_restriction.get(COMMENT_LINES_FILE).getValue()));
+
+		m_statisticForFile.put(EMPTY_LINES_FILE, new StatisticStructure(EMPTY_LINES_FILE,
+				"Пустые строки", m_restriction.get(EMPTY_LINES_FILE).getValue()));
+
 		m_statisticForFile.put(AMOUNT_OF_METHODS_FILE,
-				new StatisticStructure(AMOUNT_OF_METHODS_FILE, "Количество методов", methodLines));
+				new StatisticStructure(AMOUNT_OF_METHODS_FILE, "Количество методов",
+						m_restriction.get(AMOUNT_OF_METHODS_FILE).getValue()));
 	}
 
 	// открывающая скобка фигурная
 	private boolean isOpenBracket(String a_string)
 	{
-		return a_string.matches("^\\s*\\{\\s*$");
+		return a_string.matches("^\\s*\\{.*$");
 	}
 
 	// закрывающая скобка фигурная
 	private boolean isCloseBracket(String a_string)
 	{
-		return a_string.matches("^\\s*\\}\\s*$");
+		return a_string.matches("^\\s*\\}.*$");
 	}
 
 	// является методом

@@ -13,15 +13,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.statistic.count.Activator;
 import com.statistic.file.viewer.IFormatViewer;
 import com.statistic.folders.DirecroryStructure;
-import com.statistic.folders.FileBrowser;
 import com.statistic.folders.FileFormat;
-import com.statistic.views.DiscroptionView;
+import com.statistic.views.DescriptionView;
 import com.statistic.views.ExplorerView;
 
-public class openDialog extends AbstractHandler implements IHandler
+public class OpenDialog extends AbstractHandler implements IHandler
 {
 	@Override
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
@@ -34,18 +32,16 @@ public class openDialog extends AbstractHandler implements IHandler
 		dialog.setFilterPath("D:\\EclipseWorkDirectory");
 
 		// выбранный пользователем каталог(путь к нему)
-		String reString = dialog.open();
+		String resultString = dialog.open();
 
-		if(reString == null)
-			MessageDialog.openWarning(shell, "Предупреждение", "Вы не выбрали директорию");
-		else
+		if(resultString != null)
 		{
 			try
 			{
 				// окно с таблицей результатов
-				DiscroptionView discroptionView = (DiscroptionView) HandlerUtil
+				DescriptionView discroptionView = (DescriptionView) HandlerUtil
 						.getActiveWorkbenchWindow(a_event).getActivePage()
-						.showView(DiscroptionView.ID);
+						.showView(DescriptionView.ID);
 
 				// дерево папок
 				ExplorerView explorerView = (ExplorerView) HandlerUtil
@@ -53,39 +49,37 @@ public class openDialog extends AbstractHandler implements IHandler
 						.showView(ExplorerView.ID);
 
 				// выбранный формат
-				FileFormat fileFormat = FileFormat.toString(explorerView.comboDropDown
-						.getItem(explorerView.comboDropDown.getSelectionIndex()));
+				FileFormat fileFormat = explorerView.getSelectedFileFormat();
 
 				// рекурсивно сформированное дерево, с указанным форматом
-				DirecroryStructure direcroryStructure = DirecroryStructure
-						.createDirectory(new File(reString), fileFormat);
+				DirecroryStructure direcroryStructure = new DirecroryStructure(
+						new File(resultString), fileFormat);
 
 				// Файл указанного формата отсутствует
-				if(direcroryStructure == null || direcroryStructure.m_amountOfFiles == 0)
+				if(direcroryStructure == null || direcroryStructure.getAmountOfFile() == 0)
 				{
 					MessageDialog.openWarning(shell, "Предупреждение",
 							"Не было найдено ниодного файла формата "
-									+ FileFormat.toFormat(fileFormat));
+									+ FileFormat.toString(fileFormat));
 					return null;
 				}
 
 				// таблица вывода
-				IFormatViewer tFormatViewer = FileFormat.toTableViewer(fileFormat,
-						discroptionView.m_tableViewer);
+				//IFormatViewer tFormatViewer = FileFormat.toTableViewer(fileFormat);
 
 				// инициализация дерева
-				discroptionView.m_iTableViewer = tFormatViewer;
+				//discroptionView.setFormatViewer(tFormatViewer);
 
-				// обозреватель файлов, формирующий структуру
-				FileBrowser fileBrowser = new FileBrowser(explorerView.aTreeViewer);
-				// вывод директорий и папок
-				fileBrowser.createControls(direcroryStructure, tFormatViewer);
+				
 
 				// указатель на окно с таблицей результатов
-				explorerView.m_discroptionView = discroptionView;
+				explorerView.setDescriptionView(discroptionView);
+				
+				// обозреватель файлов, формирующий структуру
+				explorerView.fillTreeViewer(direcroryStructure);
 
 				// очистить от старых значений
-				discroptionView.m_tableViewer.getTable().removeAll();
+				discroptionView.getTableViewer().getTable().removeAll();
 			}
 			catch(PartInitException e)
 			{

@@ -21,24 +21,21 @@ public class JavaViewer implements IFormatViewer
 	public static final String	COMMENT_TO_CODE_RATE_DIRECTORY	= "java.commentToCodeDirectory";
 	public static final String	THE_BIGGEST_FILE_DIRECTORY		= "java.theBigestFileDirectory";
 	public static final String	WORST_COMMENTED_FILE_DIRECTORY	= "java.worstCommentedFileDirectory";
+	public static final String	BEST_COMMENTED_FILE_DIRECTORY	= "java.bestCommentedFileDirectory";
 
-	TableViewer					m_tableViewer;
-
-	public JavaViewer(TableViewer a_tableViewer)
-	{
-		m_tableViewer = a_tableViewer;
-	}
 
 	@Override
-	public void setAndPrintDirectory(List<AbstractStatistic> a_list)
+	public Map<String, StatisticStructure> getCountedDirectoryStatistic(List<AbstractStatistic> a_list)
 	{
 		// самый плохооткомментированный
 		AbstractStatistic badFormatedFile = null;
+		// хорошо откомментированный
+		AbstractStatistic bestFormatedFile = null;
 		// самый большой фаил
 		AbstractStatistic theBiggestFile = null;
 
 		int bigFile = -1;
-		double badCommented = Double.MAX_VALUE;
+		double badCommented = Double.MAX_VALUE, bestCommented = Double.MIN_VALUE;
 		int allLines = 0, codeLines = 0, commentLine = 0;
 
 		// для каждой статистики о файле
@@ -70,8 +67,18 @@ public class JavaViewer implements IFormatViewer
 
 			// самый плохооткомментированный код
 			if(commentLinesLoc == 0 || badCommented > (double) allLinesLoc / commentLinesLoc)
+			{
 				badCommented = commentLinesLoc == 0 ? 0 : (double) allLinesLoc / commentLinesLoc;
-			badFormatedFile = abstractStatistic;
+				badFormatedFile = abstractStatistic;
+			}
+
+			// лучшеоткомментированный код
+			if(commentLinesLoc != 0 && bestCommented < (double) allLinesLoc / commentLinesLoc)
+			{
+				bestCommented = (double) allLinesLoc / commentLinesLoc;
+				bestFormatedFile = abstractStatistic;
+			}
+			//*******************************************
 		}
 
 		// заполнение выходных данных
@@ -88,7 +95,8 @@ public class JavaViewer implements IFormatViewer
 
 		resStat.put(COMMENT_TO_CODE_RATE_DIRECTORY, new StatisticStructure(
 				COMMENT_TO_CODE_RATE_DIRECTORY, "Отношение кода к комментариям",
-				commentLine == 0 ? "Комментарии отсутствуют" : (double) codeLines / commentLine));
+				commentLine == 0 ? "Комментарии отсутствуют"
+						: String.format("%.2f %%", ((double) commentLine / codeLines) * 100)));
 
 		resStat.put(THE_BIGGEST_FILE_DIRECTORY, new StatisticStructure(THE_BIGGEST_FILE_DIRECTORY,
 				"Самый большой файл", theBiggestFile.comeFromPath()));
@@ -96,13 +104,18 @@ public class JavaViewer implements IFormatViewer
 		resStat.put(WORST_COMMENTED_FILE_DIRECTORY,
 				new StatisticStructure(WORST_COMMENTED_FILE_DIRECTORY,
 						"Плохо откомментированный файл", badFormatedFile.comeFromPath()));
+		
+		resStat.put(BEST_COMMENTED_FILE_DIRECTORY,
+				new StatisticStructure(BEST_COMMENTED_FILE_DIRECTORY,
+						"Лучше всего откомментированный файл", bestFormatedFile.comeFromPath()));
 
+		return resStat;
 		// отображение данных на экране статистики
-		new StatisticBrowser(m_tableViewer).createControls(resStat);
+		//new StatisticBrowser(m_tableViewer).createControls(resStat);
 	}
 
 	@Override
-	public void setAndPrintFolder(AbstractStatistic a_list)
+	public Map<String, StatisticStructure> getCountedFileStatistic(AbstractStatistic a_list)
 	{
 		// заполнение выходных данных
 		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(
@@ -112,13 +125,14 @@ public class JavaViewer implements IFormatViewer
 				COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",
 				(int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE).getValue() == 0
 						? "Комментарии отсутствуют"
-						: Double.valueOf(
-								(int) statisticValue.get(JavaStatistic.CODE_LINES_FILE).getValue())
-								/ (int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE)
-										.getValue()));
+						: String.format("%.2f %%",
+								Double.valueOf((int) statisticValue
+										.get(JavaStatistic.COMMENT_LINES_FILE).getValue())
+										/ (int) statisticValue.get(JavaStatistic.CODE_LINES_FILE)
+												.getValue())));
 
 		// отображение данных на экране статистики
-		new StatisticBrowser(m_tableViewer).createControls(statisticValue);
+		return statisticValue;
 	}
 
 	@Override

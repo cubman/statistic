@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.TableViewer;
 
 import com.statistic.file.count.AbstractStatistic;
 import com.statistic.file.count.JavaStatistic;
@@ -19,7 +18,7 @@ public enum FileFormat
 	Java, Xml;
 
 	// преобразование к текстовому виду
-	public static FileFormat toString(String foramt)
+	public static FileFormat toFormat(String foramt)
 	{
 		switch(foramt)
 		{
@@ -36,7 +35,7 @@ public enum FileFormat
 	}
 
 	// преобразование к формату перечисления
-	public static String toFormat(FileFormat a_fileFormat)
+	public static String toString(FileFormat a_fileFormat)
 	{
 		switch(a_fileFormat)
 		{
@@ -70,12 +69,12 @@ public enum FileFormat
 	}
 
 	// преобразование к формату класса-статистика
-	public static IFormatViewer toTableViewer(FileFormat a_fileFormat, TableViewer a_tableViewer)
+	public static IFormatViewer toTableViewer(FileFormat a_fileFormat)
 	{
 		switch(a_fileFormat)
 		{
 		case Java:
-			return new JavaViewer(a_tableViewer);
+			return new JavaViewer();
 
 		case Xml:
 			return new XmlViewer();

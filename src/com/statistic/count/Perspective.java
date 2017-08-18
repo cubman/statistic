@@ -3,7 +3,7 @@ package com.statistic.count;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import com.statistic.views.DiscroptionView;
+import com.statistic.views.DescriptionView;
 import com.statistic.views.ExplorerView;
 
 public class Perspective implements IPerspectiveFactory
@@ -13,7 +13,7 @@ public class Perspective implements IPerspectiveFactory
 	public void createInitialLayout(IPageLayout layout)
 	{
 		layout.setEditorAreaVisible(false);
-		layout.addView(ExplorerView.ID, IPageLayout.LEFT, 0.5f, layout.getEditorArea());
-		layout.addView(DiscroptionView.ID, IPageLayout.RIGHT, 0.5f, layout.getEditorArea());
+		layout.addView(ExplorerView.ID, IPageLayout.LEFT, 0.35f, layout.getEditorArea());
+		layout.addView(DescriptionView.ID, IPageLayout.RIGHT, 0.5f, layout.getEditorArea());
 	}
 }

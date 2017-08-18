@@ -1,18 +1,21 @@
 package com.statistic.views;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
+import com.statistic.count.Activator;
 import com.statistic.file.count.AbstractStatistic;
+import com.statistic.file.viewer.IFormatViewer;
 import com.statistic.folders.DirecroryStructure;
 import com.statistic.folders.FileFormat;
 
@@ -21,9 +24,10 @@ public class ExplorerView extends ViewPart
 
 	public static String	ID	= "com.statistic.count.Explorer";
 
-	public TreeViewer		aTreeViewer;
-	public Combo			comboDropDown;
-	public DiscroptionView	m_discroptionView;
+	private TreeViewer		m_treeViewer;
+	private Combo			m_comboDropDown;
+	private DescriptionView	m_descriptionView;
+	private IFormatViewer	m_iFormatViewer;
 
 	public ExplorerView()
 	{
@@ -35,77 +39,103 @@ public class ExplorerView extends ViewPart
 	{
 		setPartName("Обозреватель папок");
 
-		/*
-		 * FillLayout fillLayout = new FillLayout(); fillLayout.type =
-		 * SWT.VERTICAL; a_parent.setLayout(fillLayout);
-		 */
-
-		/*
-		 * GridLayout gridLayout = new GridLayout(2, 1);
-		 * gridLayout.setColumns(1); a_parent.setLayoutData(gridLayout);
-		 */
 		GridLayout layout = new GridLayout(1, true);
-		//layout.setHgap(43);
 		a_parent.setLayout(layout);
 
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-		aTreeViewer = new TreeViewer(a_parent,
+		m_treeViewer = new TreeViewer(a_parent,
 				SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.SINGLE);
+		m_treeViewer.setContentProvider(new DirectoryContentProvider());
+		m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
 
-		comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER);
+		m_comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER);
 
-		Tree aTree = aTreeViewer.getTree();
+		Tree aTree = m_treeViewer.getTree();
 		aTree.setLayoutData(gridData);
 
-		gridData = new GridData(SWT.FILL, SWT.BOTTOM, true, false, 1, 1);
+		gridData = new GridData(SWT.FILL, SWT.BOTTOM, true, false);
 
-		comboDropDown.setLayoutData(gridData);
+		m_comboDropDown.setLayoutData(gridData);
 
-		aTreeViewer.addDoubleClickListener(listener ->
+		// двойное нажатие на папку
+		m_treeViewer.addDoubleClickListener(listener ->
 			{
 				IStructuredSelection thisSelection = (IStructuredSelection) listener.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
 
-				if(m_discroptionView == null)
+				if(m_descriptionView == null)
 				{
 					System.out.println("Описание пусто");
 
 					return;
 				}
+
+				// клик произведен по директории
 				if(selectedNode instanceof DirecroryStructure)
 				{
 					DirecroryStructure direcroryStructure = (DirecroryStructure) selectedNode;
 
-					m_discroptionView.printDirectoryStatistic(
+					m_descriptionView.printDirectoryStatistic(
 							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure));
 
-					m_discroptionView.changeName(direcroryStructure.m_directoryName);
+					m_descriptionView.changeName(direcroryStructure.getDirectoryName(),
+							direcroryStructure.getFullDirectoryPath());
 
-					System.out.println(direcroryStructure.m_directoryName);
+					System.out.println(direcroryStructure.getDirectoryName());
 				}
+				// клик произведен по папке
 				else
 				{
 					AbstractStatistic abstractStatistic = (AbstractStatistic) selectedNode;
 
-					m_discroptionView.printFileStatistic(abstractStatistic);
-					m_discroptionView.changeName(abstractStatistic.getShortFileName());
+					m_descriptionView.printFileStatistic(abstractStatistic);
+					m_descriptionView.changeName(abstractStatistic.getShortFileName(),
+							abstractStatistic.getLongFileName());
 
 					System.out.println(abstractStatistic.getLongFileName());
 				}
 
 			});
 
-		/*
-		 * GridData gridData = new GridData(); gridData.verticalAlignment =
-		 * GridData.END; gridData.grabExcessHorizontalSpace = true;
-		 * comboDropDown.setLayoutData(gridData);
-		 */
-
 		for(FileFormat fileFormat : FileFormat.getAllPossibleFileFormat())
-			comboDropDown.add(FileFormat.toFormat(fileFormat));
+			m_comboDropDown.add(FileFormat.toString(fileFormat));
 
-		comboDropDown.select(0);
+		m_comboDropDown.addListener(SWT.Modify,
+				lis -> m_iFormatViewer = FileFormat.toTableViewer(getSelectedFileFormat()));
+
+		m_comboDropDown.select(0);
+
+	}
+
+	public FileFormat getSelectedFileFormat()
+	{
+		return FileFormat.toFormat(m_comboDropDown.getItem(m_comboDropDown.getSelectionIndex()));
+	}
+
+	public void setDescriptionView(DescriptionView a_descriptionView)
+	{
+		m_descriptionView = a_descriptionView;
+	}
+
+	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)
+	{
+		m_treeViewer.setLabelProvider(
+				new DirectoryLabelProvider(createImageOfDirectory(), createImageOfFile()));
+		m_treeViewer.setInput(a_direcroryStructure);
+	}
+
+	// изображение директории
+	private ImageDescriptor createImageOfDirectory()
+	{
+		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt",
+				"/icons/full/obj16/fldr_obj.gif");
+	}
+
+	// изображение файла
+	private ImageDescriptor createImageOfFile()
+	{
+		return m_iFormatViewer.getFileImage();
 	}
 
 	@Override
