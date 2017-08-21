@@ -17,6 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="extentionOfSearch"/>
+         </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -44,7 +47,19 @@
       </complexType>
    </element>
 
-   <element name="new_element" type="string">
+   <element name="extentionOfSearch">
+      <complexType>
+         <attribute name="class" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":com.statistic.fileformat.IFileFormat"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
    </element>
 
    <annotation>

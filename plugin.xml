@@ -51,6 +51,15 @@
                   style="push">
             </command>
          </menu>
+         <menu
+               commandId="com.statistic.count.createPerspective"
+               id="project"
+               label="Project">
+            <command
+                  commandId="com.statistic.count.createPerspective"
+                  style="push">
+            </command>
+         </menu>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -60,7 +69,8 @@
             <command
                   commandId="com.statistic.count.openDialog"
                   label="open Dialog"
-                  style="push">
+                  
+     style="push">
             </command>
          </toolbar>
       </menuContribution>
@@ -72,9 +82,32 @@
             id="com.statistic.count.openDialog"
             name="Open">
       </command>
+      <command
+            defaultHandler="com.statistic.handlers.CreatePerspectiveEclipse"
+            id="com.statistic.count.createPerspective"
+            name="CreatePerspective">
+      </command>
+          
    </extension>
    <extension
          point="com.statistic.counter">
+      <extentionOfSearch
+            class="com.statistic.fileformat.java.JavaFormat">
+      </extentionOfSearch>
+      <extentionOfSearch
+            class="com.statistic.fileformat.xml.XmlFormat">
+      </extentionOfSearch>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.statistic.count.perspective">
+         <view
+               id="com.statistic.count.view1"
+               minimized="false"
+               relationship="stack">
+         </view>
+      </perspectiveExtension>
    </extension>
 
 </plugin>
