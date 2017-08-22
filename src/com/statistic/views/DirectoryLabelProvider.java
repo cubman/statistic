@@ -16,15 +16,12 @@ public class DirectoryLabelProvider extends LabelProvider
 
 	// изображение директории
 	private ImageDescriptor	directoryImage;
-	// изображение файла
-	private ImageDescriptor	fileImage;
 	// объект ресурсов проета
 	private ResourceManager	resourceManager;
 
-	public DirectoryLabelProvider(ImageDescriptor directoryImage, ImageDescriptor a_fileDescriptor)
+	public DirectoryLabelProvider(ImageDescriptor directoryImage)
 	{
 		this.directoryImage = directoryImage;
-		this.fileImage = a_fileDescriptor;
 	}
 
 	// получение название файла
@@ -48,7 +45,7 @@ public class DirectoryLabelProvider extends LabelProvider
 	{
 		return element instanceof DirecroryStructure
 				? getResourceManager().createImage(directoryImage)
-				: getResourceManager().createImage(fileImage);
+				: getResourceManager().createImage(((AbstractStatistic)element).getImage());
 	}
 
 	// очищение ресурсов

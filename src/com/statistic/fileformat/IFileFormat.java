@@ -13,6 +13,6 @@ public interface IFileFormat
 	// получить статистику по файлу
 	AbstractStatistic getStatistic(File a_file);
 	
-	// отображение для формата
-	IFormatViewer getFormatViewer();
+	// получить среду разработки
+	String [] getNatures();
 }

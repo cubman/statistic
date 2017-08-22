@@ -18,7 +18,7 @@ public class TestRegex
 	public void test()
 	{
 		JavaStatistic javaStatistic = new JavaStatistic(new File(
-				"D:\\EclipseWorkDirectory\\git project\\statistic\\src\\com\\tests\\JavaViewer.java"));
+				"D:\\EclipseWorkDirectory\\git project\\statistic\\src\\com\\tests\\JavaViewer.java"), null);
 		
 		javaStatistic.countStatistic();
 		String s = "humbapumpa jim";

@@ -1,5 +1,7 @@
 package com.statistic.views;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ public class DescriptionView extends ViewPart
 	public static String	ID	= "com.statistic.count.description";
 
 	private TableViewer		m_tableViewer;
-	private IFileFormat	m_fileFormat;
+	private List<IFileFormat>	m_fileFormat;
 
 	public DescriptionView()
 	{
@@ -60,7 +62,7 @@ public class DescriptionView extends ViewPart
 		return m_tableViewer;
 	}
 	
-	public void setFormatViewer(IFileFormat a_fileFormat)
+	public void setFormatViewer(List<IFileFormat> a_fileFormat)
 	{
 		m_fileFormat = a_fileFormat;
 	}
@@ -74,14 +76,21 @@ public class DescriptionView extends ViewPart
 	// отобразить статистику для директории
 	public void printDirectoryStatistic(List<AbstractStatistic> a_abstractStatistics, int a_minCodeLines)
 	{
-		Map<String, StatisticStructure> dMap = m_fileFormat.getFormatViewer().getCountedDirectoryStatistic(a_abstractStatistics, a_minCodeLines);
-		m_tableViewer.setInput(dMap);
+		Map<String, StatisticStructure> resMap = new LinkedHashMap<>();
+		
+		
+		
+		for (Map.Entry<IFileFormat, List<AbstractStatistic>> abstractStatistics : getCombinedStatistic(a_abstractStatistics).entrySet())
+			if (abstractStatistics.getValue().size() > 0)
+				resMap.putAll(abstractStatistics.getValue().get(0).getCountedDirectoryStatistic(abstractStatistics.getValue(), a_minCodeLines));
+		
+		m_tableViewer.setInput(resMap);
 	}
 
 	// отобразить статистику по файлу
 	public void printFileStatistic(AbstractStatistic a_statistic)
 	{
-		m_tableViewer.setInput(m_fileFormat.getFormatViewer().getCountedFileStatistic(a_statistic));
+		m_tableViewer.setInput(a_statistic.getFileStatistc());
 	}
 
 	@Override
@@ -89,5 +98,23 @@ public class DescriptionView extends ViewPart
 	{
 		// TODO Auto-generated method stub
 
+	}
+	
+	private Map<IFileFormat, List<AbstractStatistic>> getCombinedStatistic(List<AbstractStatistic> a_abstractStatistics)
+	{
+		Map<IFileFormat, List<AbstractStatistic>> resGroup = new LinkedHashMap<>();
+		
+		for (AbstractStatistic abstractStatistic : a_abstractStatistics) {
+			IFileFormat fileFormat = abstractStatistic.getFileFormat();
+			
+			if (resGroup.containsKey(fileFormat))
+					resGroup.get(fileFormat).add(abstractStatistic);
+				else {
+					List<AbstractStatistic> add = new ArrayList<>();
+					add.add(abstractStatistic);
+					resGroup.put(fileFormat, add);
+				}
+		}
+		return resGroup;
 	}
 }

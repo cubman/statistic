@@ -57,8 +57,26 @@
                id="project"
                label="Project">
             <command
-                  commandId="com.statistic.count.createPerspective"
+                  commandId="com.statistic.count.countProjectStatistic"
                   style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <and>
+                        <iterate
+                              ifEmpty="false"
+                              operator="and">
+                           <instanceof
+                                 value="org.eclipse.core.resources.IContainer">
+                           </instanceof>
+                        </iterate>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </with>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>
@@ -72,6 +90,15 @@
                   label="open Dialog"
                   
      style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.statistic.count.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
             </command>
          </toolbar>
       </menuContribution>
@@ -79,14 +106,14 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.statistic.handlers.OpenDialog"
+            defaultHandler="com.statistic.handlers.OpenDialogHandler"
             id="com.statistic.count.openDialog"
             name="Open">
       </command>
       <command
-            defaultHandler="com.statistic.handlers.CreatePerspectiveEclipse"
-            id="com.statistic.count.createPerspective"
-            name="Create perspective">
+            defaultHandler="com.statistic.handlers.CountProjectStatisticHandler"
+            id="com.statistic.count.countProjectStatistic"
+            name="Статистика по проекту...">
       </command>
           
    </extension>

@@ -3,6 +3,8 @@ package com.statistic.fileformat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProjectNatureDescriptor;
+
 /*
  * Хранитель ресурсов
  */
@@ -24,10 +26,10 @@ public class FileFormatManager
 	// добавить формат поиска
 	public void addFormat(IFileFormat a_fileFormat)
 	{
-		for(IFileFormat fileFormat : m_fileFormats)
-			if(a_fileFormat.getExtensions().equals(fileFormat))
+		for (IFileFormat format : m_fileFormats)
+			if (format.equals(a_fileFormat))
 				return;
-
+		
 		m_fileFormats.add(a_fileFormat);
 	}
 
@@ -44,5 +46,21 @@ public class FileFormatManager
 			m_FileFormatManager = new FileFormatManager();
 		
 		return m_FileFormatManager;
+	}
+	
+	public List<IFileFormat> getFileFormatByProjectNature(String[] a_descriptor)
+	{
+		List<IFileFormat> resList = new ArrayList<>();
+		
+		for (String aDescriptor : a_descriptor)
+			for (IFileFormat format : m_fileFormats)
+				for (String nature : format.getNatures())
+					if (nature != null && aDescriptor.equals(nature))
+					{
+						resList.add(format);
+						break;
+					}
+		
+		return resList;
 	}
 }

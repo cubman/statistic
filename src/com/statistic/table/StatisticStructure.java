@@ -2,14 +2,9 @@ package com.statistic.table;
 
 public class StatisticStructure
 {
-	// id статистики
-	String	m_ID;
-
-	// словесное описание статистики
-	String	m_discription;
-
-	// значение описанной статистики
-	Object	m_value;
+	String	m_ID; // id статистики
+	String	m_discription; // словесное описание статистики
+	Object	m_value; // значение описанной статистики
 
 	public StatisticStructure(String a_id, String a_discription, Object a_value)
 	{

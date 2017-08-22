@@ -4,14 +4,13 @@ import java.io.File;
 
 import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
-import com.statistic.fileformat.IFormatViewer;
 
 public class JavaFormat implements IFileFormat
 {
 
 	private String[]		m_extension		= new String[] { ".java" };
-
-	private IFormatViewer	m_JavaViewer	= new JavaViewer();
+	
+	private String[]		m_nature		= new String[] { "org.eclipse.jdt.core.javanature" };
 
 	@Override
 	public String[] getExtensions()
@@ -22,18 +21,18 @@ public class JavaFormat implements IFileFormat
 	@Override
 	public AbstractStatistic getStatistic(File a_file)
 	{
-		return new JavaStatistic(a_file);
-	}
-
-	@Override
-	public IFormatViewer getFormatViewer()
-	{
-		return m_JavaViewer;
+		return new JavaStatistic(a_file, this);
 	}
 
 	@Override
 	public String toString()
 	{
 		return "Java";
+	}
+
+	@Override
+	public String[] getNatures()
+	{
+		return m_nature; 
 	}
 }

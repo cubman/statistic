@@ -8,89 +8,90 @@ import com.statistic.fileformat.IFileFormat;
 import java.io.File;
 import java.util.ArrayList;
 
-public class DirecroryStructure 
+public class DirecroryStructure
 {
 	// ссылка на родителя
-	private DirecroryStructure		m_parent		= null;
+	private DirecroryStructure			m_parent					= null;
 
 	// список дочерних директорий
-	private List<DirecroryStructure>	m_listDirectoryStructure			= new ArrayList<>();
+	private List<DirecroryStructure>	m_listDirectoryStructure	= new ArrayList<>();
 
 	// список файлов с форматом
-	private List<AbstractStatistic>	m_listAbstractStatistic			= new ArrayList<>();
+	private List<AbstractStatistic>		m_listAbstractStatistic		= new ArrayList<>();
 
 	// количество файлов с указанным форматом
-	private int						m_amountOfFiles	= 0;
+	private int							m_amountOfFiles				= 0;
 
 	// наименование директории
-	private String					m_directoryName;
+	private String						m_directoryName;
 
 	// полный путь до папки
-	private String					m_fullPath;
+	private String						m_fullPath;
 
 	// получить количество файлов с указанным форматом
 	public int getAmountOfFile()
 	{
 		return m_amountOfFiles;
 	}
-	
+
 	// получить наименование директории
 	public String getDirectoryName()
 	{
 		return m_directoryName;
 	}
-	
+
 	// получить полный путь до папки
 	public String getFullDirectoryPath()
 	{
 		return m_fullPath;
 	}
-	
+
 	// вернуть предка для папки
 	public DirecroryStructure getParent()
 	{
 		return m_parent;
 	}
-	
+
 	// вернуть предка для папки
-		public void setParent(DirecroryStructure a_directoryName)
-		{
-			m_parent = a_directoryName;
-		}
-	
+	public void setParent(DirecroryStructure a_directoryName)
+	{
+		m_parent = a_directoryName;
+	}
+
 	// получить список подпапок
 	public List<DirecroryStructure> getListDirectoryStructure()
 	{
 		return m_listDirectoryStructure;
 	}
-	
+
 	// получить список файлов в папке
 	public List<AbstractStatistic> getListAbstractStatistic()
 	{
 		return m_listAbstractStatistic;
 	}
-	
+
 	// создание дерева папок
-	public DirecroryStructure(File head, IFileFormat a_fileFormat)
+	public DirecroryStructure(File head, List<IFileFormat> a_fileFormat)
 	{
-		//DirecroryStructure direcroryStructure = new DirecroryStructure();
+		// DirecroryStructure direcroryStructure = new DirecroryStructure();
 		m_directoryName = head.getName();
 		m_fullPath = head.getAbsolutePath();
-		
+
 		if(head.isDirectory())
 			search(head, a_fileFormat);
 	}
-	
-	private DirecroryStructure(DirecroryStructure a_parent, String a_directoryName, String a_fullPathToDirectory)
+
+	private DirecroryStructure(DirecroryStructure a_parent, String a_directoryName,
+			String a_fullPathToDirectory)
 	{
 		m_parent = a_parent;
 		m_directoryName = a_directoryName;
 		m_fullPath = a_fullPathToDirectory;
-		
+
 	}
 
 	// формирование списка
-	private int search(File a_file, IFileFormat a_fileFormat)
+	private int search(File a_file, List<IFileFormat> a_fileFormat)
 	{
 		// если файл - папка
 		if(a_file.isDirectory())
@@ -106,22 +107,26 @@ public class DirecroryStructure
 					if(temp.isDirectory() && !a_file.getName().startsWith("."))
 					{
 						// оформление структуры
-						DirecroryStructure child = new DirecroryStructure(this, temp.getName(), temp.getAbsolutePath());
-						
+						DirecroryStructure child = new DirecroryStructure(this, temp.getName(),
+								temp.getAbsolutePath());
+
 						m_listDirectoryStructure.add(child);
 						// подсчет количества папок содержащих файлы
 						m_amountOfFiles += child.search(temp, a_fileFormat);
 					}
 					else
 					{
-						for (String format : a_fileFormat.getExtensions())
-							// файл имеет указанный формат
-							if( temp.getName().endsWith(format))
-							{
-								AbstractStatistic abstractStatistic = a_fileFormat.getStatistic(temp);
-								abstractStatistic.countStatistic();
-								m_listAbstractStatistic.add(abstractStatistic);
-							}
+						for(IFileFormat fileFormat : a_fileFormat)
+							for(String format : fileFormat.getExtensions())
+								// файл имеет указанный формат
+								if(temp.getName().endsWith(format))
+								{
+									AbstractStatistic abstractStatistic = fileFormat
+											.getStatistic(temp);
+									abstractStatistic.countStatistic();
+									m_listAbstractStatistic.add(abstractStatistic);
+									break;
+								}
 					}
 				}
 				m_amountOfFiles += m_listAbstractStatistic.size();
@@ -135,8 +140,6 @@ public class DirecroryStructure
 
 		return m_amountOfFiles;
 	}
-
-	
 
 	// получить статистику для директории
 	public static List<AbstractStatistic> getStatisticForSelectedFolder(

@@ -1,5 +1,9 @@
 package com.statistic.views;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -9,6 +13,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
@@ -24,10 +30,10 @@ public class ExplorerView extends ViewPart
 	public static String		ID					= "com.statistic.count.Explorer";
 
 	private TreeViewer			m_treeViewer;
-	private Combo				m_comboDropDown;
+	private Table				m_table;
 	private DescriptionView		m_descriptionView;
 	private FileFormatManager	m_fileFormatManager	= FileFormatManager.getInstance();
-	private IFileFormat		m_iFileFormat;
+	private List<IFileFormat>	m_iFileFormat = new ArrayList<>();
 	private Spinner				m_spinner;
 
 	public ExplorerView()
@@ -54,11 +60,14 @@ public class ExplorerView extends ViewPart
 		Tree aTree = m_treeViewer.getTree();
 		aTree.setLayoutData(gridData);
 
-		m_comboDropDown = new Combo(a_parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
+		
+	    
+		//m_checkboxGroup = new CheckboxGroup(a_parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY | SWT.CHECK);
 
 		gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-
-		m_comboDropDown.setLayoutData(gridData);
+		m_table = new Table(a_parent, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		m_table.setLayoutData(gridData);
+		//m_comboDropDown.setLayoutData(gridData);
 
 		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
 
@@ -111,23 +120,35 @@ public class ExplorerView extends ViewPart
 			});
 
 		// список форматов для поиска
-		for(IFileFormat fileFormat : m_fileFormatManager.getFileFormats())
+		/*for(IFileFormat fileFormat : m_fileFormatManager.getFileFormats())
 			m_comboDropDown.add(fileFormat.toString());
-
+*/
 		// выбрали другой формат
-		m_comboDropDown.addListener(SWT.Modify,
-				lis -> m_iFileFormat =  m_fileFormatManager.getFileFormats().get(m_comboDropDown.getSelectionIndex()));
+		m_table.addListener(SWT.Selection,
+				lis -> {
+					m_iFileFormat.clear();
+					for (int i = 0; i < m_table.getItemCount(); ++i)
+						if (m_table.getItem(i).getChecked())
+							m_iFileFormat.add(m_fileFormatManager.getFileFormats().get(i));
+				});
 
+		List<IFileFormat> list = m_fileFormatManager.getFileFormats();
+
+	    for (int i = 0; i < list.size(); i++) {
+	      TableItem item = new TableItem(m_table, SWT.NONE);
+	      item.setText(list.get(i).toString());
+	    }
+	    
 		// выбрали первый по списку
-		m_comboDropDown.select(0);
+		//m_comboDropDown.select(0);
 
 	}
 
-	/*// получить текущий класс обработки
-	public IFileFormat getSelectedFileFormat()
+	// получить текущий класс обработки
+	public void clearExplorer()
 	{
-		return m_iFileFormat;
-	}*/
+		m_treeViewer.setInput(null);
+	}
 
 	// получить ссылку на окно с таблицей
 	public void setDescriptionView(DescriptionView a_descriptionView)
@@ -135,17 +156,16 @@ public class ExplorerView extends ViewPart
 		m_descriptionView = a_descriptionView;
 	}
 
-	// получить 
-	public IFileFormat getFormatViewer()
+	// получить
+	public List<IFileFormat> getFormatViewer()
 	{
 		return m_iFileFormat;
 	}
 
 	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)
 	{
-		m_treeViewer.setLabelProvider(
-				new DirectoryLabelProvider(createImageOfDirectory(), createImageOfFile()));		
-		m_treeViewer.setInput(new Object[] {a_direcroryStructure});
+		m_treeViewer.setLabelProvider(new DirectoryLabelProvider(createImageOfDirectory()));
+		m_treeViewer.setInput(new Object[] { a_direcroryStructure });
 	}
 
 	// изображение директории
@@ -154,12 +174,10 @@ public class ExplorerView extends ViewPart
 		return Activator.imageDescriptorFromPlugin("org.eclipse.e4.ui.workbench.swt",
 				"/icons/full/obj16/fldr_obj.gif");
 	}
-
-	// изображение файла
-	private ImageDescriptor createImageOfFile()
-	{
-		return m_iFileFormat.getFormatViewer().getFileImage();
-	}
+	/*
+	 * // изображение файла private ImageDescriptor createImageOfFile() { return
+	 * m_iFileFormat.getFormatViewer().getFileImage(); }
+	 */
 
 	@Override
 	public void setFocus()
