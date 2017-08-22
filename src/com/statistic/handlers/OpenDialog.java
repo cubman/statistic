@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.statistic.fileformat.IFileFormat;
@@ -20,10 +22,23 @@ import com.statistic.views.ExplorerView;
 
 public class OpenDialog extends AbstractHandler implements IHandler
 {
+	public static final String ID = "com.statistic.count.openDialog";
+
 	@Override
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
 	{
 		Shell shell = new Shell(Display.getDefault());
+
+		try
+		{
+			PlatformUI.getWorkbench().showPerspective("com.statistic.count.perspective",
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+		}
+		catch(WorkbenchException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		// диалоговое окно выбора директории
 		DirectoryDialog dialog = new DirectoryDialog(shell);
@@ -58,25 +73,25 @@ public class OpenDialog extends AbstractHandler implements IHandler
 				if(direcroryStructure == null || direcroryStructure.getAmountOfFile() == 0)
 				{
 					MessageDialog.openWarning(shell, "Предупреждение",
-							"Не было найдено ниодного файла формата "
-									+ fileFormat.toString());
+							"Не было найдено ниодного файла формата " + fileFormat.toString());
 					return null;
 				}
 
 				// таблица вывода
-				//IFormatViewer tFormatViewer = FileFormat.toTableViewer(fileFormat);
+				// IFormatViewer tFormatViewer =
+				// FileFormat.toTableViewer(fileFormat);
 
 				// инициализация дерева
 				discroptionView.setFormatViewer(explorerView.getFormatViewer());
-				
+
 				// указатель на окно с таблицей результатов
 				explorerView.setDescriptionView(discroptionView);
-				
-				// обозреватель файлов, формирующий структуру
-				explorerView.fillTreeViewer(direcroryStructure);
 
+				// обозреватель файлов, формирующий структуру
+				//explorerView.fillTreeViewer(DirecroryStructure.addRootElement(direcroryStructure));
+				explorerView.fillTreeViewer(direcroryStructure);
 				// очистить от старых значений
-				//discroptionView.getTableViewer().getTable().removeAll();
+				// discroptionView.getTableViewer().getTable().removeAll();
 			}
 			catch(PartInitException e)
 			{

@@ -52,6 +52,12 @@ public class DirecroryStructure
 		return m_parent;
 	}
 	
+	// вернуть предка для папки
+		public void setParent(DirecroryStructure a_directoryName)
+		{
+			m_parent = a_directoryName;
+		}
+	
 	// получить список подпапок
 	public List<DirecroryStructure> getListDirectoryStructure()
 	{
@@ -70,9 +76,11 @@ public class DirecroryStructure
 		//DirecroryStructure direcroryStructure = new DirecroryStructure();
 		m_directoryName = head.getName();
 		m_fullPath = head.getAbsolutePath();
-
+		
 		if(head.isDirectory())
 			search(head, a_fileFormat);
+		
+		DirecroryStructure direcroryStructure = new DirecroryStructure(this, null, null);
 	}
 	
 	private DirecroryStructure(DirecroryStructure a_parent, String a_directoryName, String a_fullPathToDirectory)
@@ -160,4 +168,11 @@ public class DirecroryStructure
 
 	}
 
+	public static DirecroryStructure addRootElement(DirecroryStructure a_direcroryStructure) {
+		DirecroryStructure direcroryStructure = new DirecroryStructure(new File(""), null);
+		a_direcroryStructure.setParent(direcroryStructure);
+		direcroryStructure.m_listDirectoryStructure.add(a_direcroryStructure);
+		
+		return direcroryStructure;
+	}
 }

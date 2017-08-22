@@ -15,7 +15,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
+            name="Statistic count"
             class="com.statistic.count.Perspective"
             id="com.statistic.count.perspective">
       </perspective>
@@ -45,6 +45,7 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                commandId="com.statistic.count.openDialog"
+               id="file"
                label="File">
             <command
                   commandId="com.statistic.count.openDialog"
@@ -85,7 +86,7 @@
       <command
             defaultHandler="com.statistic.handlers.CreatePerspectiveEclipse"
             id="com.statistic.count.createPerspective"
-            name="CreatePerspective">
+            name="Create perspective">
       </command>
           
    </extension>
@@ -97,17 +98,6 @@
       <extentionOfSearch
             class="com.statistic.fileformat.xml.XmlFormat">
       </extentionOfSearch>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="com.statistic.count.perspective">
-         <view
-               id="com.statistic.count.view1"
-               minimized="false"
-               relationship="stack">
-         </view>
-      </perspectiveExtension>
    </extension>
 
 </plugin>

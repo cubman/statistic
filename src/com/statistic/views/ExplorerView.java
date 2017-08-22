@@ -49,7 +49,8 @@ public class ExplorerView extends ViewPart
 				SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.SINGLE);
 
 		m_treeViewer.setContentProvider(new DirectoryContentProvider());
-		m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
+		//m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
+		
 		Tree aTree = m_treeViewer.getTree();
 		aTree.setLayoutData(gridData);
 
@@ -142,9 +143,11 @@ public class ExplorerView extends ViewPart
 
 	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)
 	{
+		//m_treeViewer.add(a_direcroryStructure, a_direcroryStructure.getListDirectoryStructure());//(a_direcroryStructure);
 		m_treeViewer.setLabelProvider(
 				new DirectoryLabelProvider(createImageOfDirectory(), createImageOfFile()));
 		m_treeViewer.setInput(a_direcroryStructure);
+		//m_treeViewer.add(m_treeViewer.getInput(), a_direcroryStructure);
 	}
 
 	// изображение директории

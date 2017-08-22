@@ -129,7 +129,7 @@ public class JavaViewer implements IFormatViewer
 								Double.valueOf((int) statisticValue
 										.get(JavaStatistic.COMMENT_LINES_FILE).getValue())
 										/ (int) statisticValue.get(JavaStatistic.CODE_LINES_FILE)
-												.getValue())));
+												.getValue() * 100)));
 
 		// отображение данных на экране статистики
 		return statisticValue;
