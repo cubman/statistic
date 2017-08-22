@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.count.Activator;
+import com.statistic.count.FileRestriction;
 import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.FileFormatManager;
 import com.statistic.fileformat.IFileFormat;
@@ -30,11 +31,11 @@ public class ExplorerView extends ViewPart
 	public static String		ID					= "com.statistic.count.Explorer";
 
 	private TreeViewer			m_treeViewer;
-	private Table				m_table;
+
 	private DescriptionView		m_descriptionView;
 	private FileFormatManager	m_fileFormatManager	= FileFormatManager.getInstance();
-	private List<IFileFormat>	m_iFileFormat = new ArrayList<>();
-	private Spinner				m_spinner;
+	//private List<IFileFormat>	m_iFileFormat = new ArrayList<>();
+	private FileRestriction m_fileRestriction;
 
 	public ExplorerView()
 	{
@@ -64,19 +65,7 @@ public class ExplorerView extends ViewPart
 	    
 		//m_checkboxGroup = new CheckboxGroup(a_parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY | SWT.CHECK);
 
-		gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		m_table = new Table(a_parent, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		m_table.setLayoutData(gridData);
-		//m_comboDropDown.setLayoutData(gridData);
-
-		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
-
-		m_spinner = new Spinner(a_parent, SWT.BORDER);
-		m_spinner.setIncrement(5);
-		m_spinner.setMinimum(10);
-		m_spinner.setMaximum(200);
-
-		m_spinner.setToolTipText("Минимальное значение кодовых строк");
+		
 		
 		// двойное нажатие на папку
 		m_treeViewer.addDoubleClickListener(listener ->
@@ -98,7 +87,7 @@ public class ExplorerView extends ViewPart
 
 					m_descriptionView.printDirectoryStatistic(
 							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure),
-							Integer.parseInt(m_spinner.getText()));
+							m_fileRestriction.getLineAmount());
 
 					m_descriptionView.changeName(direcroryStructure.getDirectoryName(),
 							direcroryStructure.getFullDirectoryPath());
@@ -124,20 +113,7 @@ public class ExplorerView extends ViewPart
 			m_comboDropDown.add(fileFormat.toString());
 */
 		// выбрали другой формат
-		m_table.addListener(SWT.Selection,
-				lis -> {
-					m_iFileFormat.clear();
-					for (int i = 0; i < m_table.getItemCount(); ++i)
-						if (m_table.getItem(i).getChecked())
-							m_iFileFormat.add(m_fileFormatManager.getFileFormats().get(i));
-				});
 
-		List<IFileFormat> list = m_fileFormatManager.getFileFormats();
-
-	    for (int i = 0; i < list.size(); i++) {
-	      TableItem item = new TableItem(m_table, SWT.NONE);
-	      item.setText(list.get(i).toString());
-	    }
 	    
 		// выбрали первый по списку
 		//m_comboDropDown.select(0);
@@ -150,6 +126,11 @@ public class ExplorerView extends ViewPart
 		m_treeViewer.setInput(null);
 	}
 
+	public void setRestriction(FileRestriction a_fileRestriction)
+	{
+		m_fileRestriction = a_fileRestriction;
+	}
+	
 	// получить ссылку на окно с таблицей
 	public void setDescriptionView(DescriptionView a_descriptionView)
 	{
@@ -159,7 +140,7 @@ public class ExplorerView extends ViewPart
 	// получить
 	public List<IFileFormat> getFormatViewer()
 	{
-		return m_iFileFormat;
+		return m_fileRestriction.getSelectedFormats();
 	}
 
 	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)

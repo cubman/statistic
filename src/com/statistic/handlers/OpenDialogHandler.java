@@ -20,6 +20,7 @@ import com.statistic.fileformat.IFileFormat;
 import com.statistic.folders.DirecroryStructure;
 import com.statistic.views.DescriptionView;
 import com.statistic.views.ExplorerView;
+import com.statistic.views.FormatChooseDialog;
 
 public class OpenDialogHandler extends AbstractHandler implements IHandler
 {
@@ -29,7 +30,8 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
 	{
 		Shell shell = new Shell(Display.getDefault());
-
+		FormatChooseDialog formatChooseDialog = new FormatChooseDialog(shell);
+		formatChooseDialog.openDialog();
 		try
 		{
 			PlatformUI.getWorkbench().showPerspective("com.statistic.count.perspective",
