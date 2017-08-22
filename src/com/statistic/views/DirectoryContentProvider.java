@@ -13,7 +13,7 @@ public class DirectoryContentProvider implements ITreeContentProvider
 		@Override
 		public Object[] getElements(Object a_inputElement)
 		{
-			DirecroryStructure direcroryStructure = (DirecroryStructure) a_inputElement;
+			//DirecroryStructure direcroryStructure = (DirecroryStructure) a_inputElement;
 			/*ArrayList<Object> ret = new ArrayList<>(direcroryStructure.getListDirectoryStructure());
 
 			ret.addAll(direcroryStructure.getListAbstractStatistic());
@@ -22,7 +22,8 @@ public class DirectoryContentProvider implements ITreeContentProvider
 			
 
 			//if (direcroryStructure.getParent() == null)//
-				return new Object[] {direcroryStructure};// getChildren(a_inputElement);
+			DirecroryStructure direcroryStructure = (DirecroryStructure) ((Object[])a_inputElement)[0];
+				return new Object[]{direcroryStructure};// getChildren(a_inputElement);
 			
 		}
 
@@ -55,7 +56,7 @@ public class DirectoryContentProvider implements ITreeContentProvider
 		public boolean hasChildren(Object a_element)
 		{
 			if(a_element instanceof AbstractStatistic)
-			return false;
+				return false;
 
 			DirecroryStructure direcroryStructure = (DirecroryStructure) a_element;
 			ArrayList<Object> ret = new ArrayList<>(direcroryStructure.getListDirectoryStructure());

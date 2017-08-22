@@ -20,6 +20,7 @@ public class JavaViewer implements IFormatViewer
 	public static final String	THE_BIGGEST_FILE_DIRECTORY		= "java.theBigestFileDirectory";
 	public static final String	WORST_COMMENTED_FILE_DIRECTORY	= "java.worstCommentedFileDirectory";
 	public static final String	BEST_COMMENTED_FILE_DIRECTORY	= "java.bestCommentedFileDirectory";
+	public static final String	FILES_AMOUNT_DIRECTORY			= "java.amountOfFileDetectedDirectory";
 
 	@Override
 	public Map<String, StatisticStructure> getCountedDirectoryStatistic(
@@ -64,14 +65,16 @@ public class JavaViewer implements IFormatViewer
 			}
 
 			// самый плохооткомментированный код
-			if((commentLinesLoc == 0 || badCommented > (double) commentLinesLoc / allLinesLoc) && codeLinesLoc > a_minCodeLines)
+			if((commentLinesLoc == 0 || badCommented > (double) commentLinesLoc / allLinesLoc)
+					&& codeLinesLoc > a_minCodeLines)
 			{
 				badCommented = commentLinesLoc == 0 ? 0 : (double) commentLinesLoc / allLinesLoc;
 				badFormatedFile = abstractStatistic;
 			}
 
 			// лучшеоткомментированный код
-			if(commentLinesLoc != 0 && bestCommented < (double) commentLinesLoc / allLinesLoc && codeLinesLoc > a_minCodeLines)
+			if(commentLinesLoc != 0 && bestCommented < (double) commentLinesLoc / allLinesLoc
+					&& codeLinesLoc > a_minCodeLines)
 			{
 				bestCommented = (double) commentLinesLoc / allLinesLoc;
 				bestFormatedFile = abstractStatistic;
@@ -82,6 +85,11 @@ public class JavaViewer implements IFormatViewer
 		// заполнение выходных данных
 		Map<String, StatisticStructure> resStat = new LinkedHashMap<>();
 
+		resStat.put(FILES_AMOUNT_DIRECTORY,
+				new StatisticStructure(FILES_AMOUNT_DIRECTORY,
+						"Количество исследованных файлов",
+						a_list.size()));
+		
 		resStat.put(JavaStatistic.ALL_LINES_DIRECTORY, new StatisticStructure(
 				JavaStatistic.ALL_LINES_DIRECTORY, "Общее количество строк", allLines));
 
@@ -110,6 +118,8 @@ public class JavaViewer implements IFormatViewer
 						"Лучше всего откомментированный файл",
 						bestFormatedFile == null ? "Не было найдено удовлетворяющего условию файла"
 								: bestFormatedFile.comeFromPath()));
+		
+		
 
 		return resStat;
 	}
@@ -125,11 +135,11 @@ public class JavaViewer implements IFormatViewer
 				COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",
 				(int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE).getValue() == 0
 						? "Комментарии отсутствуют"
-						: String.format("%.2f %%",
-								Double.valueOf((int) statisticValue
-										.get(JavaStatistic.COMMENT_LINES_FILE).getValue())
-										/ (int) statisticValue.get(JavaStatistic.CODE_LINES_FILE)
-												.getValue() * 100)));
+						: String.format("%.2f %%", Double
+								.valueOf((int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE)
+										.getValue())
+								/ (int) statisticValue.get(JavaStatistic.CODE_LINES_FILE).getValue()
+								* 100)));
 
 		// отображение данных на экране статистики
 		return statisticValue;

@@ -79,8 +79,6 @@ public class DirecroryStructure
 		
 		if(head.isDirectory())
 			search(head, a_fileFormat);
-		
-		DirecroryStructure direcroryStructure = new DirecroryStructure(this, null, null);
 	}
 	
 	private DirecroryStructure(DirecroryStructure a_parent, String a_directoryName, String a_fullPathToDirectory)
@@ -166,13 +164,5 @@ public class DirecroryStructure
 		// добавление в выходной массив структуру файла
 		a_statistic.addAll(a_direcroryStructure.m_listAbstractStatistic);
 
-	}
-
-	public static DirecroryStructure addRootElement(DirecroryStructure a_direcroryStructure) {
-		DirecroryStructure direcroryStructure = new DirecroryStructure(new File(""), null);
-		a_direcroryStructure.setParent(direcroryStructure);
-		direcroryStructure.m_listDirectoryStructure.add(a_direcroryStructure);
-		
-		return direcroryStructure;
 	}
 }

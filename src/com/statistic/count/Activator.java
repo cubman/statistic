@@ -2,20 +2,15 @@ package com.statistic.count;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.statistic.fileformat.FileFormatManager;
 import com.statistic.fileformat.IFileFormat;
 import com.statistic.fileformat.java.JavaFormat;
-import com.statistic.fileformat.xml.XmlFormat;
 
 public class Activator extends AbstractUIPlugin
 {

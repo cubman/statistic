@@ -77,10 +77,6 @@ public class OpenDialog extends AbstractHandler implements IHandler
 					return null;
 				}
 
-				// таблица вывода
-				// IFormatViewer tFormatViewer =
-				// FileFormat.toTableViewer(fileFormat);
-
 				// инициализация дерева
 				discroptionView.setFormatViewer(explorerView.getFormatViewer());
 
@@ -88,10 +84,7 @@ public class OpenDialog extends AbstractHandler implements IHandler
 				explorerView.setDescriptionView(discroptionView);
 
 				// обозреватель файлов, формирующий структуру
-				//explorerView.fillTreeViewer(DirecroryStructure.addRootElement(direcroryStructure));
 				explorerView.fillTreeViewer(direcroryStructure);
-				// очистить от старых значений
-				// discroptionView.getTableViewer().getTable().removeAll();
 			}
 			catch(PartInitException e)
 			{
