@@ -1,55 +1,58 @@
 package com.statistic.views;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.statistic.fileformat.TreeOutFormat;
 import com.statistic.table.StatisticStructure;
 
 //отображение статистики
-public class TableLabelProvider implements ITableLabelProvider
+class TableLabelProvider implements ITableLabelProvider
 {
 
-	@Override
-	public void addListener(ILabelProviderListener a_listener)
-	{
-	}
-
-	@Override
-	public void dispose()
-	{
-	}
-
-	@Override
-	public boolean isLabelProperty(Object a_element, String a_property)
-	{
-		return false;
-	}
-
-	@Override
-	public void removeListener(ILabelProviderListener a_listener)
-	{
-	}
-
-	@Override
-	public Image getColumnImage(Object a_element, int a_columnIndex)
+	public Image getColumnImage(Object element, int columnIndex)
 	{
 		return null;
 	}
 
-	@Override
-	public String getColumnText(Object a_element, int a_columnIndex)
+	public String getColumnText(Object element, int columnIndex)
 	{
-		StatisticStructure ss = (StatisticStructure) a_element;
-		switch(a_columnIndex)
+		switch(columnIndex)
 		{
 		case 0:
-			return ss.getDiscription();
+			 if (element instanceof TreeOutFormat) 
+					return ((TreeOutFormat)element).getFileFormat();
+			 else if (element instanceof StatisticStructure)
+				 return ((StatisticStructure)element).getDiscription();
+			 else return "error";
+				
+			
 		case 1:
-			return ss.getValue().toString();
-		default:
-			return null;
+			if(element instanceof List<?> || element instanceof TreeOutFormat)
+				return "";
+			else
+				return ((StatisticStructure) element).getValue().toString();
 		}
+		return null;
+	}
 
+	public void addListener(ILabelProviderListener listener)
+	{
+	}
+
+	public void dispose()
+	{
+	}
+
+	public boolean isLabelProperty(Object element, String property)
+	{
+		return false;
+	}
+
+	public void removeListener(ILabelProviderListener listener)
+	{
 	}
 }

@@ -2,6 +2,7 @@ package com.statistic.folders;
 
 import java.util.List;
 
+import com.statistic.count.FileRestriction;
 import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
 
@@ -71,14 +72,14 @@ public class DirecroryStructure
 	}
 
 	// создание дерева папок
-	public DirecroryStructure(File head, List<IFileFormat> a_fileFormat)
+	public DirecroryStructure(File head, FileRestriction a_fileRestriction)
 	{
 		// DirecroryStructure direcroryStructure = new DirecroryStructure();
 		m_directoryName = head.getName();
 		m_fullPath = head.getAbsolutePath();
 
 		if(head.isDirectory())
-			search(head, a_fileFormat);
+			search(head, a_fileRestriction);
 	}
 
 	private DirecroryStructure(DirecroryStructure a_parent, String a_directoryName,
@@ -91,7 +92,7 @@ public class DirecroryStructure
 	}
 
 	// формирование списка
-	private int search(File a_file, List<IFileFormat> a_fileFormat)
+	private int search(File a_file, FileRestriction a_fileRestriction)
 	{
 		// если файл - папка
 		if(a_file.isDirectory())
@@ -112,11 +113,11 @@ public class DirecroryStructure
 
 						m_listDirectoryStructure.add(child);
 						// подсчет количества папок содержащих файлы
-						m_amountOfFiles += child.search(temp, a_fileFormat);
+						m_amountOfFiles += child.search(temp, a_fileRestriction);
 					}
 					else
 					{
-						for(IFileFormat fileFormat : a_fileFormat)
+						for(IFileFormat fileFormat : a_fileRestriction.getSelectedFormats())
 							for(String format : fileFormat.getExtensions())
 								// файл имеет указанный формат
 								if(temp.getName().endsWith(format))

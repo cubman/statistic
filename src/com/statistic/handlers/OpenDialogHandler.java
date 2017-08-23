@@ -1,13 +1,9 @@
 package com.statistic.handlers;
 
-import java.io.File;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -16,9 +12,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.statistic.fileformat.IFileFormat;
-import com.statistic.folders.DirecroryStructure;
-import com.statistic.views.DescriptionView;
+import com.statistic.count.FileRestriction;
 import com.statistic.views.ExplorerView;
 import com.statistic.views.FormatChooseDialog;
 
@@ -31,7 +25,11 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 	{
 		Shell shell = new Shell(Display.getDefault());
 		FormatChooseDialog formatChooseDialog = new FormatChooseDialog(shell);
-		formatChooseDialog.openDialog();
+		FileRestriction fileRestriction = formatChooseDialog.openDialog();
+		
+		if (fileRestriction == null)
+			return null;
+		
 		try
 		{
 			PlatformUI.getWorkbench().showPerspective("com.statistic.count.perspective",
@@ -59,10 +57,10 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 					.getActiveWorkbenchWindow(a_event).getActivePage()
 					.showView(ExplorerView.ID);
 		
-
+			explorerView.setRestriction(fileRestriction);
 		// выбранный формат
-		List<IFileFormat> fileFormat = explorerView.getFormatViewer();
-		new createExplorer().setData(resultString, a_event, fileFormat, shell);
+		//List<IFileFormat> fileFormat = explorerView.getFormatViewer();
+		CreateExplorer.setData(resultString, a_event, fileRestriction, shell);
 		}
 		catch(PartInitException e)
 		{

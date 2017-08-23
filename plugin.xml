@@ -44,15 +44,6 @@
             allPopups="true"
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               commandId="com.statistic.count.openDialog"
-               id="file"
-               label="File">
-            <command
-                  commandId="com.statistic.count.openDialog"
-                  style="push">
-            </command>
-         </menu>
-         <menu
                commandId="com.statistic.count.createPerspective"
                id="project"
                label="Project">

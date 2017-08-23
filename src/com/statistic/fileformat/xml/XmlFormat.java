@@ -32,6 +32,6 @@ public class XmlFormat implements IFileFormat
 	public String[] getNatures()
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return new String[0];
 	}
 }

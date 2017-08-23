@@ -28,8 +28,8 @@ public abstract class AbstractStatistic
 	protected String							m_comeFrom				= null;
 
 	// формат файла
-	protected IFileFormat m_fileFormat = null;
-	
+	protected IFileFormat						m_fileFormat			= null;
+
 	// конструктор
 	public AbstractStatistic(File a_file, IFileFormat a_fileFormat)
 	{
@@ -82,15 +82,13 @@ public abstract class AbstractStatistic
 	public abstract Map<String, StatisticStructure> getCountedDirectoryStatistic(
 			List<AbstractStatistic> a_list, int a_minCodeLines);
 
-	public abstract Map<String, StatisticStructure> getCountedFileStatistic(
-			AbstractStatistic a_list);
+	public abstract Map<String, StatisticStructure> getCountedFileStatistic();
 
-	
 	public IFileFormat getFileFormat()
 	{
 		return m_fileFormat;
 	}
-	
+
 	public class RestrictionPair
 	{
 		int					m_value				= 0;

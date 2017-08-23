@@ -10,7 +10,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import com.statistic.count.Activator;
 import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
-import com.statistic.fileformat.java.JavaStatistic;
 import com.statistic.table.StatisticStructure;
 
 public class XmlStatistic extends AbstractStatistic
@@ -32,7 +31,6 @@ public class XmlStatistic extends AbstractStatistic
 	public static final String	ALL_LINES_DIRECTORY				= "xml.allLinesDirectory";
 	public static final String	CODE_LINES_DIRECTORY			= "xml.codeLinesDirectory";
 	public static final String	COMMENT_LINES_DIRECTORY			= "xml.commentLinesDirectory";
-	public static final String	FORMAT_NAME_DIRECTORY			= "xml.formatName";
 	
 	public XmlStatistic(File a_file, IFileFormat a_xmlFormat)
 	{
@@ -78,9 +76,6 @@ public class XmlStatistic extends AbstractStatistic
 			List<AbstractStatistic> a_list, int a_minCodeLines)
 	{
 		Map<String, StatisticStructure> resStat = new LinkedHashMap<>();
-
-		resStat.put(FORMAT_NAME_DIRECTORY,
-				new StatisticStructure(FORMAT_NAME_DIRECTORY, "наименование директории", m_fileFormat.toString()));
 		
 		resStat.put(FILES_AMOUNT_DIRECTORY,
 				new StatisticStructure(FILES_AMOUNT_DIRECTORY,
@@ -106,10 +101,10 @@ public class XmlStatistic extends AbstractStatistic
 	}
 
 	@Override
-	public Map<String, StatisticStructure> getCountedFileStatistic(AbstractStatistic a_list)
+	public Map<String, StatisticStructure> getCountedFileStatistic()
 	{
 		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(
-				a_list.getFileStatistc());
+				getFileStatistc());
 
 		statisticValue.put(COMMENT_TO_CODE_RATE_FILE, new StatisticStructure(
 				COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",

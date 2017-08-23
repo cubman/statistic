@@ -1,28 +1,18 @@
 package com.statistic.views;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
 import com.statistic.count.Activator;
 import com.statistic.count.FileRestriction;
 import com.statistic.fileformat.AbstractStatistic;
-import com.statistic.fileformat.FileFormatManager;
-import com.statistic.fileformat.IFileFormat;
 import com.statistic.folders.DirecroryStructure;
 
 public class ExplorerView extends ViewPart
@@ -33,7 +23,7 @@ public class ExplorerView extends ViewPart
 	private TreeViewer			m_treeViewer;
 
 	private DescriptionView		m_descriptionView;
-	private FileFormatManager	m_fileFormatManager	= FileFormatManager.getInstance();
+	//private FileFormatManager	m_fileFormatManager	= FileFormatManager.getInstance();
 	//private List<IFileFormat>	m_iFileFormat = new ArrayList<>();
 	private FileRestriction m_fileRestriction;
 
@@ -59,13 +49,7 @@ public class ExplorerView extends ViewPart
 		m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
 		
 		Tree aTree = m_treeViewer.getTree();
-		aTree.setLayoutData(gridData);
-
-		
-	    
-		//m_checkboxGroup = new CheckboxGroup(a_parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY | SWT.CHECK);
-
-		
+		aTree.setLayoutData(gridData);	
 		
 		// двойное нажатие на папку
 		m_treeViewer.addDoubleClickListener(listener ->
@@ -107,17 +91,6 @@ public class ExplorerView extends ViewPart
 				}
 
 			});
-
-		// список форматов для поиска
-		/*for(IFileFormat fileFormat : m_fileFormatManager.getFileFormats())
-			m_comboDropDown.add(fileFormat.toString());
-*/
-		// выбрали другой формат
-
-	    
-		// выбрали первый по списку
-		//m_comboDropDown.select(0);
-
 	}
 
 	// получить текущий класс обработки
@@ -135,12 +108,6 @@ public class ExplorerView extends ViewPart
 	public void setDescriptionView(DescriptionView a_descriptionView)
 	{
 		m_descriptionView = a_descriptionView;
-	}
-
-	// получить
-	public List<IFileFormat> getFormatViewer()
-	{
-		return m_fileRestriction.getSelectedFormats();
 	}
 
 	public void fillTreeViewer(DirecroryStructure a_direcroryStructure)

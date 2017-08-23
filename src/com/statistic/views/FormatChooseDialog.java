@@ -3,12 +3,17 @@ package com.statistic.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
@@ -21,12 +26,11 @@ import com.statistic.fileformat.IFileFormat;
 public class FormatChooseDialog extends Dialog
 {
 
-	private FileRestriction		m_fileRestriction	= new FileRestriction(0, new ArrayList<>());
+	private FileRestriction		m_fileRestriction;
 	private Table				m_table;
 	private Spinner				m_spinner;
-	private Button				m_button;
-	private FileFormatManager	fileFormatManager;
-
+	private FileFormatManager	fileFormatManager = FileFormatManager.getInstance();
+	
 	public FormatChooseDialog(Shell a_parent)
 	{
 		super(a_parent);
@@ -35,45 +39,84 @@ public class FormatChooseDialog extends Dialog
 
 	public FileRestriction openDialog()
 	{
-		Shell parent = getParent();
-		Shell dialog = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		dialog.setSize(500, 500);
-		GridLayout layout = new GridLayout(2, true);
-		dialog.setLayout(layout);
+		Shell shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		
+		//Shell dialog = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		shell.setSize(500, 190);
+		
 
-		dialog.setText("Java Source and Support");
-		dialog.open();
+		shell.setText("Выберите параметры поиска");
+		createContents(shell);
+		//shell.pack();
+		shell.open();
 
-		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		m_table = new Table(dialog, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		m_table.setLayoutData(gridData);
-		// m_comboDropDown.setLayoutData(gridData);
+		
+		Display display = getParent().getDisplay();
+		Point point = display.getActiveShell().getLocation();
+		Point mainWindow = getParent().getSize();
+		Point paramWindow = shell.getSize();
+		
+		shell.setLocation( point.x + (mainWindow.x - point.x) / 2 - paramWindow.x / 2, point.y + (mainWindow.y - point.y) / 2 - paramWindow.y / 2);
+		
+		shell.addListener(SWT.Move, tener -> System.out.println(shell.getLocation()));
+		while(!shell.isDisposed())
+		{
+			if(!display.readAndDispatch())
+				display.sleep();
+		}
 
-		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+		return m_fileRestriction;
+	}
 
-		m_spinner = new Spinner(dialog, SWT.BORDER);
+	private void createContents(final Shell shell)
+	{
+		shell.setLayout(new GridLayout(3, false));
+
+		Label mainMessage = new Label(shell, SWT.NONE);
+		mainMessage.setText("Выберите параметры поиска:");
+		GridData data = new GridData();
+		data.horizontalSpan = 3;
+		mainMessage.setLayoutData(data);
+
+		data = new GridData(SWT.FILL, SWT.FILL, true, true);
+		m_table = new Table(shell, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		data.heightHint = 15;
+		data.horizontalSpan = 2;
+		m_table.setLayoutData(data);
+
+		data = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
+		m_spinner = new Spinner(shell, SWT.BORDER | SWT.RIGHT);
 		m_spinner.setIncrement(5);
 		m_spinner.setMinimum(10);
 		m_spinner.setMaximum(200);
-
 		m_spinner.setToolTipText("Минимальное значение кодовых строк");
-
-		gridData = new GridData(SWT.RIGHT, SWT.CENTER, true, false);
-		m_button = new Button(dialog, SWT.BUTTON2);
+		m_spinner.setLayoutData(data);
 		
-		m_button.setLayoutData(gridData);
+		data = new GridData(SWT.FILL, SWT.FILL, true, false);
+		Label chosenFile = new Label(shell, SWT.FILL);
+		chosenFile.setVisible(false);
 		
-		
-		fileFormatManager = FileFormatManager.getInstance();
+		Font initialFont = chosenFile.getFont();
+	    FontData[] fontData = initialFont.getFontData();
+	    for (int i = 0; i < fontData.length; i++) {
+	      fontData[i].setHeight(8);
+	      fontData[i].setStyle(SWT.ITALIC);
+	    }
+	    
+	    Font newFont = new Font(shell.getDisplay(), fontData);
+	    chosenFile.setFont(newFont);
+		chosenFile.setLayoutData(data);		
 
 		m_table.addListener(SWT.Selection, lis ->
 			{
-				m_fileRestriction.getSelectedFormats().clear();
+				int cnt = 0;
 
 				for(int i = 0; i < m_table.getItemCount(); ++i)
 					if(m_table.getItem(i).getChecked())
-						m_fileRestriction.getSelectedFormats()
-								.add(fileFormatManager.getFileFormats().get(i));
+						++cnt;
+				
+				chosenFile.setVisible(cnt > 0);
+				chosenFile.setText(String.format("* Вы выбрали: %d", cnt));
 			});
 
 		List<IFileFormat> list = fileFormatManager.getFileFormats();
@@ -83,15 +126,45 @@ public class FormatChooseDialog extends Dialog
 			TableItem item = new TableItem(m_table, SWT.NONE);
 			item.setText(list.get(i).toString());
 		}
+		
 
-		Display display = parent.getDisplay();
-		while(!dialog.isDisposed())
-		{
-			if(!display.readAndDispatch())
-				display.sleep();
-		}
+		Button ok = new Button(shell, SWT.PUSH);
+		ok.setText("OK");
+		data = new GridData(GridData.FILL_HORIZONTAL);
+		ok.setLayoutData(data);
+		ok.addListener(SWT.Selection, event -> {
+			m_fileRestriction = new FileRestriction(
+				Integer.parseInt(m_spinner.getText()), getSelectedFileFormats());
+			if (m_fileRestriction.getSelectedFormats().isEmpty())
+					MessageDialog.openError(shell, "Выберите формат", "Не было выбрано ниодного формата");
+			else
+				shell.close();
+		});
 
-		return m_fileRestriction;
+		Button cancel = new Button(shell, SWT.PUSH);
+		cancel.setText("Cancel");
+		data = new GridData(GridData.FILL_HORIZONTAL);
+		cancel.setLayoutData(data);
+		cancel.addListener(SWT.Selection, event ->
+			{
+				m_fileRestriction = null;
+				shell.close();
+			});
+
+		// Set the OK button as the default, so
+		// user can type input and press Enter
+		// to dismiss
+		shell.setDefaultButton(ok);
 	}
 
+	private List<IFileFormat> getSelectedFileFormats()
+	{
+		List<IFileFormat> res = new ArrayList<>();
+
+		for(int i = 0; i < m_table.getItemCount(); ++i)
+			if(m_table.getItem(i).getChecked())
+				res.add(fileFormatManager.getFileFormats().get(i));
+		
+		return res;
+	}
 }

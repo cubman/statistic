@@ -33,7 +33,6 @@ public class JavaStatistic extends AbstractStatistic
 	public static final String	ALL_LINES_DIRECTORY				= "java.allLinesDirectory";
 	public static final String	CODE_LINES_DIRECTORY			= "java.codeLinesDirectory";
 	public static final String	COMMENT_LINES_DIRECTORY			= "java.commentLinesDirectory";
-	public static final String	FORMAT_NAME_DIRECTORY			= "java.formatName";
 
 	public JavaStatistic(File a_file, IFileFormat a_javaFormat)
 	{
@@ -118,7 +117,6 @@ public class JavaStatistic extends AbstractStatistic
 
 		// статистика для дирректории
 
-				
 		// статистика для дирректории
 		m_statisticForDirectory.put(ALL_LINES_DIRECTORY,
 				new StatisticStructure(ALL_LINES_DIRECTORY, "Общее количество строк", allLines));
@@ -151,7 +149,6 @@ public class JavaStatistic extends AbstractStatistic
 				new StatisticStructure(AMOUNT_OF_METHODS_FILE, "Количество методов",
 						m_restriction.get(AMOUNT_OF_METHODS_FILE).getValue()));
 	}
-
 
 	public Map<String, StatisticStructure> getCountedDirectoryStatistic(
 			List<AbstractStatistic> a_list, int a_minCodeLines)
@@ -215,14 +212,9 @@ public class JavaStatistic extends AbstractStatistic
 		// заполнение выходных данных
 		Map<String, StatisticStructure> resStat = new LinkedHashMap<>();
 
-		resStat.put(FORMAT_NAME_DIRECTORY,
-				new StatisticStructure(FORMAT_NAME_DIRECTORY, "наименование директории", m_fileFormat.toString()));
-		
-		resStat.put(FILES_AMOUNT_DIRECTORY,
-				new StatisticStructure(FILES_AMOUNT_DIRECTORY,
-						"Количество исследованных файлов",
-						a_list.size()));
-		
+		resStat.put(FILES_AMOUNT_DIRECTORY, new StatisticStructure(FILES_AMOUNT_DIRECTORY,
+				"Количество исследованных файлов", a_list.size()));
+
 		resStat.put(JavaStatistic.ALL_LINES_DIRECTORY, new StatisticStructure(
 				JavaStatistic.ALL_LINES_DIRECTORY, "Общее количество строк", allLines));
 
@@ -251,34 +243,28 @@ public class JavaStatistic extends AbstractStatistic
 						"Лучше всего откомментированный файл",
 						bestFormatedFile == null ? "Не было найдено удовлетворяющего условию файла"
 								: bestFormatedFile.comeFromPath()));
-		
-		
 
 		return resStat;
 	}
 
-
-	public Map<String, StatisticStructure> getCountedFileStatistic(AbstractStatistic a_list)
+	public Map<String, StatisticStructure> getCountedFileStatistic()
 	{
 		// заполнение выходных данных
-		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(
-				a_list.getFileStatistc());
+		Map<String, StatisticStructure> statisticValue = new LinkedHashMap<>(getFileStatistc());
 
-		statisticValue.put(COMMENT_TO_CODE_RATE_FILE, new StatisticStructure(
-				COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",
-				(int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE).getValue() == 0
-						? "Комментарии отсутствуют"
-						: String.format("%.2f %%", Double
-								.valueOf((int) statisticValue.get(JavaStatistic.COMMENT_LINES_FILE)
-										.getValue())
-								/ (int) statisticValue.get(JavaStatistic.CODE_LINES_FILE).getValue()
-								* 100)));
+		statisticValue.put(COMMENT_TO_CODE_RATE_FILE,
+				new StatisticStructure(COMMENT_TO_CODE_RATE_FILE, "Отношение кода к комментариям",
+						(int) statisticValue.get(COMMENT_LINES_FILE).getValue() == 0
+								? "Комментарии отсутствуют"
+								: String.format("%.2f %%", Double.valueOf(
+										(int) statisticValue.get(COMMENT_LINES_FILE).getValue())
+										/ (int) statisticValue.get(CODE_LINES_FILE).getValue()
+										* 100)));
 
 		// отображение данных на экране статистики
 		return statisticValue;
 	}
 
-	
 	// открывающая скобка фигурная
 	private boolean isOpenBracket(String a_string)
 	{

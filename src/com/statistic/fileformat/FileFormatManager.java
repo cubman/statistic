@@ -3,7 +3,6 @@ package com.statistic.fileformat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProjectNatureDescriptor;
 
 /*
  * Хранитель ресурсов
@@ -53,14 +52,14 @@ public class FileFormatManager
 		List<IFileFormat> resList = new ArrayList<>();
 		
 		for (String aDescriptor : a_descriptor)
-			for (IFileFormat format : m_fileFormats)
-				for (String nature : format.getNatures())
-					if (nature != null && aDescriptor.equals(nature))
-					{
-						resList.add(format);
-						break;
-					}
-		
+			for (IFileFormat format : m_fileFormats) 
+					for (String nature : format.getNatures())
+						if (nature != null && aDescriptor.equals(nature))
+						{
+							resList.add(format);
+							break;
+						}
+			
 		return resList;
 	}
 }
