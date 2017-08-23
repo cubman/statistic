@@ -16,14 +16,9 @@ public class Activator extends AbstractUIPlugin
 {
 	public static Activator		INSTANCE;
 
-	public final static String	PLUGIN_ID	= "com.statistic.count";
+	public final static String	PLUGIN_ID			= "com.statistic.count";
 
 	public final static String	EXTENSION_POINT_ID	= "com.statistic.counter";
-	
-	public Activator()
-	{
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	public void start(BundleContext a_context) throws Exception
@@ -31,26 +26,29 @@ public class Activator extends AbstractUIPlugin
 		super.start(a_context);
 		INSTANCE = this;
 		System.out.println("Activator.start()");
-		IConfigurationElement[] config =
-				Platform.getExtensionRegistry().
-			    getConfigurationElementsFor(EXTENSION_POINT_ID);
-		
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(EXTENSION_POINT_ID);
+
 		FileFormatManager fileFormatManager = FileFormatManager.getInstance();
-        try {
-            for (IConfigurationElement e : config) {
-                System.out.println("Evaluating extension");
-                final Object o =
-                        e.createExecutableExtension("class");
-                if (o instanceof IFileFormat) {
-                	fileFormatManager.addFormat((IFileFormat)o);
-                }
-            }
-            
-            setJavaFirst();
-            
-        } catch (CoreException ex) {
-            System.out.println(ex.getMessage());
-        }
+		try
+		{
+			for(IConfigurationElement e : config)
+			{
+				System.out.println("Evaluating extension");
+				final Object o = e.createExecutableExtension("class");
+				if(o instanceof IFileFormat)
+				{
+					fileFormatManager.addFormat((IFileFormat) o);
+				}
+			}
+
+			setJavaFirst();
+
+		}
+		catch(CoreException ex)
+		{
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	@Override
@@ -64,15 +62,15 @@ public class Activator extends AbstractUIPlugin
 	{
 		return INSTANCE;
 	}
-	
+
 	// установить язык Java первым в списке всех языков
 	private void setJavaFirst()
 	{
 		FileFormatManager fileFormatManager = FileFormatManager.getInstance();
 		List<IFileFormat> lFileFormats = fileFormatManager.getFileFormats();
-		
-		for (int i = 0; i < lFileFormats.size(); ++i)
-			if (lFileFormats.get(i) instanceof JavaFormat)
+
+		for(int i = 0; i < lFileFormats.size(); ++i)
+			if(lFileFormats.get(i) instanceof JavaFormat)
 			{
 				lFileFormats.set(i, lFileFormats.get(0));
 				lFileFormats.set(0, new JavaFormat());

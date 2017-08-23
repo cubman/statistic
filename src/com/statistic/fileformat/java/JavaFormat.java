@@ -5,12 +5,17 @@ import java.io.File;
 import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
 
+/**
+ * 
+ * Формат файла : JAVA
+ *
+ */
 public class JavaFormat implements IFileFormat
 {
 
-	private String[]		m_extension		= new String[] { ".java" };
-	
-	private String[]		m_nature		= new String[] { "org.eclipse.jdt.core.javanature" };
+	private String[]	m_extension	= new String[] { ".java" };
+
+	private String[]	m_nature	= new String[] { "org.eclipse.jdt.core.javanature" };
 
 	@Override
 	public String[] getExtensions()
@@ -33,6 +38,6 @@ public class JavaFormat implements IFileFormat
 	@Override
 	public String[] getNatures()
 	{
-		return m_nature; 
+		return m_nature;
 	}
 }

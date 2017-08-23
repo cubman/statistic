@@ -23,13 +23,14 @@ class TableLabelProvider implements ITableLabelProvider
 		switch(columnIndex)
 		{
 		case 0:
-			 if (element instanceof TreeOutFormat) 
-					return ((TreeOutFormat)element).getFileFormat();
-			 else if (element instanceof StatisticStructure)
-				 return ((StatisticStructure)element).getDiscription();
-			 else return "error";
-				
-			
+			if(element instanceof TreeOutFormat)
+				return ((TreeOutFormat) element).getFileFormat();
+			else
+				if(element instanceof StatisticStructure)
+					return ((StatisticStructure) element).getDiscription();
+				else
+					return "error";
+
 		case 1:
 			if(element instanceof List<?> || element instanceof TreeOutFormat)
 				return "";

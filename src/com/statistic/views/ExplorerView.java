@@ -47,6 +47,7 @@ public class ExplorerView extends ViewPart
 
 		m_treeViewer.setContentProvider(new DirectoryContentProvider());
 		m_treeViewer.setFilters(new DirectoryFilterEmptyFolders());
+	
 		
 		Tree aTree = m_treeViewer.getTree();
 		aTree.setLayoutData(gridData);	
@@ -93,7 +94,7 @@ public class ExplorerView extends ViewPart
 			});
 	}
 
-	// получить текущий класс обработки
+	// очистить дерево директорий
 	public void clearExplorer()
 	{
 		m_treeViewer.setInput(null);
@@ -114,6 +115,7 @@ public class ExplorerView extends ViewPart
 	{
 		m_treeViewer.setLabelProvider(new DirectoryLabelProvider(createImageOfDirectory()));
 		m_treeViewer.setInput(new Object[] { a_direcroryStructure });
+		m_treeViewer.expandToLevel(2);
 	}
 
 	// изображение директории

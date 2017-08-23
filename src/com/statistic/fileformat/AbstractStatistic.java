@@ -11,6 +11,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.statistic.table.StatisticStructure;
 
+/**
+ * 
+ * Статистика для файла
+ *
+ */
 public abstract class AbstractStatistic
 {
 	// статистика

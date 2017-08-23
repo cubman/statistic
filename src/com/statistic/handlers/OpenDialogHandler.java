@@ -7,15 +7,17 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.statistic.count.FileRestriction;
-import com.statistic.views.ExplorerView;
 import com.statistic.views.FormatChooseDialog;
 
+/**
+ * 
+ * Открытие меню выбора папки
+ *
+ */
 public class OpenDialogHandler extends AbstractHandler implements IHandler
 {
 	public static final String ID = "com.statistic.count.openDialog";
@@ -26,10 +28,10 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 		Shell shell = new Shell(Display.getDefault());
 		FormatChooseDialog formatChooseDialog = new FormatChooseDialog(shell);
 		FileRestriction fileRestriction = formatChooseDialog.openDialog();
-		
-		if (fileRestriction == null)
+
+		if(fileRestriction == null)
 			return null;
-		
+
 		try
 		{
 			PlatformUI.getWorkbench().showPerspective("com.statistic.count.perspective",
@@ -37,7 +39,6 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 		}
 		catch(WorkbenchException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -49,24 +50,7 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 		// выбранный пользователем каталог(путь к нему)
 		String resultString = dialog.open();
 
-		// дерево папок
-		ExplorerView explorerView;
-		try
-		{
-			explorerView = (ExplorerView) HandlerUtil
-					.getActiveWorkbenchWindow(a_event).getActivePage()
-					.showView(ExplorerView.ID);
-		
-			explorerView.setRestriction(fileRestriction);
-		// выбранный формат
-		//List<IFileFormat> fileFormat = explorerView.getFormatViewer();
 		CreateExplorer.setData(resultString, a_event, fileRestriction, shell);
-		}
-		catch(PartInitException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		return null;
 

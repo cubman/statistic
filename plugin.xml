@@ -50,24 +50,6 @@
             <command
                   commandId="com.statistic.count.countProjectStatistic"
                   style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <and>
-                        <iterate
-                              ifEmpty="false"
-                              operator="and">
-                           <instanceof
-                                 value="org.eclipse.core.resources.IContainer">
-                           </instanceof>
-                        </iterate>
-                        <count
-                              value="1">
-                        </count>
-                     </and>
-                  </with>
-               </visibleWhen>
             </command>
          </menu>
       </menuContribution>
@@ -102,7 +84,6 @@
             name="Open">
       </command>
       <command
-            defaultHandler="com.statistic.handlers.CountProjectStatisticHandler"
             id="com.statistic.count.countProjectStatistic"
             name="Статистика по проекту...">
       </command>
@@ -116,6 +97,30 @@
       <extentionOfSearch
             class="com.statistic.fileformat.xml.XmlFormat">
       </extentionOfSearch>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.statistic.handlers.CountProjectStatisticHandler"
+            commandId="com.statistic.count.countProjectStatistic">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <and>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="org.eclipse.core.resources.IContainer">
+                     </instanceof>
+                  </iterate>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </with>
+         </enabledWhen>
+      </handler>
    </extension>
 
 </plugin>

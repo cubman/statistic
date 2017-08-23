@@ -29,8 +29,8 @@ public class FormatChooseDialog extends Dialog
 	private FileRestriction		m_fileRestriction;
 	private Table				m_table;
 	private Spinner				m_spinner;
-	private FileFormatManager	fileFormatManager = FileFormatManager.getInstance();
-	
+	private FileFormatManager	fileFormatManager	= FileFormatManager.getInstance();
+
 	public FormatChooseDialog(Shell a_parent)
 	{
 		super(a_parent);
@@ -40,24 +40,24 @@ public class FormatChooseDialog extends Dialog
 	public FileRestriction openDialog()
 	{
 		Shell shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		
-		//Shell dialog = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+
+		// Shell dialog = new Shell(parent, SWT.DIALOG_TRIM |
+		// SWT.APPLICATION_MODAL);
 		shell.setSize(500, 190);
-		
 
 		shell.setText("Выберите параметры поиска");
 		createContents(shell);
-		//shell.pack();
+		// shell.pack();
 		shell.open();
 
-		
 		Display display = getParent().getDisplay();
 		Point point = display.getActiveShell().getLocation();
 		Point mainWindow = getParent().getSize();
 		Point paramWindow = shell.getSize();
-		
-		shell.setLocation( point.x + (mainWindow.x - point.x) / 2 - paramWindow.x / 2, point.y + (mainWindow.y - point.y) / 2 - paramWindow.y / 2);
-		
+
+		shell.setLocation(point.x + (mainWindow.x - point.x) / 2 - paramWindow.x / 2,
+				point.y + (mainWindow.y - point.y) / 2 - paramWindow.y / 2);
+
 		shell.addListener(SWT.Move, tener -> System.out.println(shell.getLocation()));
 		while(!shell.isDisposed())
 		{
@@ -91,21 +91,22 @@ public class FormatChooseDialog extends Dialog
 		m_spinner.setMaximum(200);
 		m_spinner.setToolTipText("Минимальное значение кодовых строк");
 		m_spinner.setLayoutData(data);
-		
+
 		data = new GridData(SWT.FILL, SWT.FILL, true, false);
 		Label chosenFile = new Label(shell, SWT.FILL);
 		chosenFile.setVisible(false);
-		
+
 		Font initialFont = chosenFile.getFont();
-	    FontData[] fontData = initialFont.getFontData();
-	    for (int i = 0; i < fontData.length; i++) {
-	      fontData[i].setHeight(8);
-	      fontData[i].setStyle(SWT.ITALIC);
-	    }
-	    
-	    Font newFont = new Font(shell.getDisplay(), fontData);
-	    chosenFile.setFont(newFont);
-		chosenFile.setLayoutData(data);		
+		FontData[] fontData = initialFont.getFontData();
+		for(int i = 0; i < fontData.length; i++)
+		{
+			fontData[i].setHeight(8);
+			fontData[i].setStyle(SWT.ITALIC);
+		}
+
+		Font newFont = new Font(shell.getDisplay(), fontData);
+		chosenFile.setFont(newFont);
+		chosenFile.setLayoutData(data);
 
 		m_table.addListener(SWT.Selection, lis ->
 			{
@@ -114,7 +115,7 @@ public class FormatChooseDialog extends Dialog
 				for(int i = 0; i < m_table.getItemCount(); ++i)
 					if(m_table.getItem(i).getChecked())
 						++cnt;
-				
+
 				chosenFile.setVisible(cnt > 0);
 				chosenFile.setText(String.format("* Вы выбрали: %d", cnt));
 			});
@@ -126,20 +127,21 @@ public class FormatChooseDialog extends Dialog
 			TableItem item = new TableItem(m_table, SWT.NONE);
 			item.setText(list.get(i).toString());
 		}
-		
 
 		Button ok = new Button(shell, SWT.PUSH);
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
-		ok.addListener(SWT.Selection, event -> {
-			m_fileRestriction = new FileRestriction(
-				Integer.parseInt(m_spinner.getText()), getSelectedFileFormats());
-			if (m_fileRestriction.getSelectedFormats().isEmpty())
-					MessageDialog.openError(shell, "Выберите формат", "Не было выбрано ниодного формата");
-			else
-				shell.close();
-		});
+		ok.addListener(SWT.Selection, event ->
+			{
+				m_fileRestriction = new FileRestriction(Integer.parseInt(m_spinner.getText()),
+						getSelectedFileFormats());
+				if(m_fileRestriction.getSelectedFormats().isEmpty())
+					MessageDialog.openError(shell, "Выберите формат",
+							"Не было выбрано ниодного формата");
+				else
+					shell.close();
+			});
 
 		Button cancel = new Button(shell, SWT.PUSH);
 		cancel.setText("Cancel");
@@ -164,7 +166,7 @@ public class FormatChooseDialog extends Dialog
 		for(int i = 0; i < m_table.getItemCount(); ++i)
 			if(m_table.getItem(i).getChecked())
 				res.add(fileFormatManager.getFileFormats().get(i));
-		
+
 		return res;
 	}
 }

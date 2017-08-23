@@ -16,7 +16,7 @@ class TableContentProvider implements ITreeContentProvider
 			return ((List<?>) parentElement).toArray();
 		if(parentElement instanceof TreeOutFormat)
 			return ((TreeOutFormat) parentElement).getStatistic().toArray();
-		
+
 		return new Object[0];
 	}
 
@@ -33,7 +33,7 @@ class TableContentProvider implements ITreeContentProvider
 			return ((List<?>) element).size() > 0;
 		if(element instanceof TreeOutFormat)
 			return ((TreeOutFormat) element).getStatistic().size() > 0;
-		
+
 		return false;
 	}
 

@@ -96,6 +96,7 @@ public class JavaStatistic extends AbstractStatistic
 						m_restriction.get(COMMENT_LINES_FILE).addValue();
 					}
 					else
+						//
 						for(Map.Entry<String, RestrictionPair> mEntry : m_restriction.entrySet())
 							if(mEntry.getValue().getRestriction().test(currentLine))
 							{

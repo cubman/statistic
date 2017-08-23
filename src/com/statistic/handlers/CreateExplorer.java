@@ -32,9 +32,6 @@ public class CreateExplorer
 						.getActiveWorkbenchWindow(a_event).getActivePage()
 						.showView(ExplorerView.ID);
 
-				// выбранный формат
-				// IFileFormat fileFormat = explorerView.getFormatViewer();
-
 				// рекурсивно сформированное дерево, с указанным форматом
 				DirecroryStructure direcroryStructure = new DirecroryStructure(
 						new File(workspaceDirectory), a_fileRestriction);
@@ -49,6 +46,9 @@ public class CreateExplorer
 					return;
 				}
 
+				// добавит ограничения на отображение и файлы
+				explorerView.setRestriction(a_fileRestriction);
+
 				// указатель на окно с таблицей результатов
 				explorerView.setDescriptionView(discroptionView);
 
@@ -56,7 +56,7 @@ public class CreateExplorer
 				explorerView.fillTreeViewer(direcroryStructure);
 
 				// очистить от старых значений
-				// discroptionView.getTableViewer().getTable().removeAll();
+				discroptionView.clearTable();
 			}
 			catch(PartInitException e)
 			{

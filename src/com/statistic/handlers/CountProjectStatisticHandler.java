@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -16,10 +17,10 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.statistic.count.FileRestriction;
 import com.statistic.fileformat.FileFormatManager;
-
 
 public class CountProjectStatisticHandler extends AbstractHandler implements IHandler
 {
@@ -27,49 +28,59 @@ public class CountProjectStatisticHandler extends AbstractHandler implements IHa
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
 	{
 		Shell shell = new Shell(Display.getDefault());
- 
-		IWorkbench  workbench = PlatformUI.getWorkbench();
 
+		// активная перспектива
+		IWorkbench workbench = PlatformUI.getWorkbench();
 		ISelectionService service = workbench.getActiveWorkbenchWindow().getSelectionService();
 		ISelection selection = service.getSelection();
+
+		// выбор осуществлен в перспективе. не связанной с той, в которой была
+		// выбрана диретория
+		if(selection == null || ((IStructuredSelection) selection).getFirstElement() == null)
+		{
+			MessageDialog.openInformation(shell, "Объект не активен",
+					"Объект выделения был утрачен");
+			return null;
+		}
+
 		String workspaceDirectory = null;
 		FileRestriction fileRestriction = null;
-		
-		if (selection instanceof IStructuredSelection) {
-	        
-	        Object obj = ((IStructuredSelection) selection).getFirstElement();
-	        
-	        Assert.isNotNull(obj);
-	        Assert.isTrue(obj instanceof IContainer);
-	        IContainer iContainer = (IContainer)obj;
-	        IProject iProject =  iContainer.getProject();
-	        //iProject.getWorkspace().getNatureDescriptors()[0].
-	        
-	        
-	        try
+
+		// была выбрана папка/ проект
+		if(selection instanceof IStructuredSelection)
+		{
+
+			Object obj = ((IStructuredSelection) selection).getFirstElement();
+
+			Assert.isNotNull(obj);
+			Assert.isTrue(obj instanceof IContainer);
+			IContainer iContainer = (IContainer) obj;
+			IProject iProject = iContainer.getProject();
+			try
 			{
-	        	fileRestriction = new FileRestriction(0, FileFormatManager.getInstance().getFileFormatByProjectNature(iProject.getDescription().getNatureIds()));
+				// получаем список форматов исходя из проекта
+				fileRestriction = new FileRestriction(0, FileFormatManager.getInstance()
+						.getFileFormatByProjectNature(iProject.getDescription().getNatureIds()));
 			}
 			catch(CoreException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			// получаем абсолютный путь до папки проекта
 			workspaceDirectory = ((IContainer) obj).getLocation().toFile().getAbsolutePath();
 
-	    }
+		}
 		try
 		{
-			workbench.showPerspective("com.statistic.count.perspective", workbench.getActiveWorkbenchWindow());
+			workbench.showPerspective("com.statistic.count.perspective",
+					workbench.getActiveWorkbenchWindow());
 		}
 		catch(WorkbenchException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		CreateExplorer.setData(workspaceDirectory, a_event, fileRestriction, shell);
-		
 
 		return null;
 
