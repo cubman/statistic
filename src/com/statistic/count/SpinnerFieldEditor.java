@@ -12,7 +12,7 @@ public class SpinnerFieldEditor extends FieldEditor
 	
 	public static final int INCREMENT_VALUE = 5;
 	public static final int MIN_VALUE = 10;
-	public static final int MAX_VALUE = 20;
+	public static final int MAX_VALUE = 200;
 	public static final int START_VALUE = 10;
 	
 	public SpinnerFieldEditor(String name, String labelText, Composite parent)

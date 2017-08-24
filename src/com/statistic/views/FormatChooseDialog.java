@@ -8,9 +8,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -67,22 +69,40 @@ public class FormatChooseDialog extends Dialog
 
 	private void createContents(final Shell shell)
 	{
-		shell.setLayout(new GridLayout(3, false));
+		GridLayout gridLayout = new GridLayout(2, false);
 
-		Label mainMessage = new Label(shell, SWT.NONE);
+		FillLayout fillLayout = new FillLayout();
+		shell.setLayout(fillLayout);
+		
+		
+		
+		Composite composite = new Composite(shell, SWT.NONE);
+		composite.setLayout(gridLayout);
+		
+		//* label up
+		Label mainMessage = new Label(composite, SWT.NONE);
 		mainMessage.setText("Выберите параметры поиска:");
 		GridData data = new GridData();
-		data.horizontalSpan = 3;
-		mainMessage.setLayoutData(data);
-
-		data = new GridData(SWT.FILL, SWT.FILL, true, true);
-		m_table = new Table(shell, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		data.heightHint = 15;
 		data.horizontalSpan = 2;
+		mainMessage.setLayoutData(data);
+		
+		//* table left
+		data = new GridData(SWT.FILL, SWT.FILL, true, true);
+		m_table = new Table(composite, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		data.heightHint = 10;
+		data.horizontalSpan = 1;
 		m_table.setLayoutData(data);
 
-		data = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
-		m_spinner = new Spinner(shell, SWT.BORDER | SWT.RIGHT);
+		//* right colomn
+		Composite composite2 = new Composite(composite, SWT.NONE);
+		composite2.setLayout(new GridLayout(1, false));
+		data = new GridData(SWT.FILL, SWT.FILL, false, true);
+		data.widthHint = 100;
+		composite2.setLayoutData(data);
+		
+		// spinner
+		data = new GridData(SWT.FILL, SWT.LEFT, true, true);
+		m_spinner = new Spinner(composite2, SWT.LEFT);
 		m_spinner.setIncrement(SpinnerFieldEditor.INCREMENT_VALUE);
 		m_spinner.setMinimum(SpinnerFieldEditor.MIN_VALUE);
 		m_spinner.setMaximum(SpinnerFieldEditor.MAX_VALUE);
@@ -90,8 +110,11 @@ public class FormatChooseDialog extends Dialog
 		m_spinner.setSelection(Activator.getDefault().getPreferenceStore().getInt("SPINNER"));
 		m_spinner.setLayoutData(data);
 
-		data = new GridData(SWT.FILL, SWT.FILL, true, false);
-		Label chosenFile = new Label(shell, SWT.FILL);
+		
+		// label of amount of checked elements
+		data = new GridData(SWT.FILL, SWT.FILL, true, false);	
+		
+		Label chosenFile = new Label(composite2, SWT.FILL);
 		chosenFile.setVisible(false);
 
 		Font initialFont = chosenFile.getFont();
@@ -126,7 +149,15 @@ public class FormatChooseDialog extends Dialog
 			item.setText(list.get(i).toString());
 		}
 
-		Button ok = new Button(shell, SWT.PUSH);
+		
+		Composite composite3 = new Composite(composite, SWT.None);
+		composite3.setLayout(new GridLayout(2, false));
+		data = new GridData(SWT.RIGHT, SWT.FILL, true, false);
+		data.widthHint = 240;
+		data.horizontalSpan = 2;
+		composite3.setLayoutData(data);
+		
+		Button ok = new Button(composite3, SWT.PUSH | SWT.CENTER);
 		ok.setText("OK");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		ok.setLayoutData(data);
@@ -141,7 +172,7 @@ public class FormatChooseDialog extends Dialog
 					shell.close();
 			});
 
-		Button cancel = new Button(shell, SWT.PUSH);
+		Button cancel = new Button(composite3, SWT.PUSH | SWT.CENTER);
 		cancel.setText("Cancel");
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		cancel.setLayoutData(data);
@@ -164,4 +195,6 @@ public class FormatChooseDialog extends Dialog
 
 		return res;
 	}
+	
+	
 }
