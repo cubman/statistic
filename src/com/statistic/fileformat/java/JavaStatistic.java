@@ -159,6 +159,7 @@ public class JavaStatistic extends AbstractStatistic
 		// хорошо откомментированный
 		AbstractStatistic bestFormatedFile = null;
 		// самый большой фаил
+	
 		AbstractStatistic theBiggestFile = null;
 
 		int bigFile = -1;

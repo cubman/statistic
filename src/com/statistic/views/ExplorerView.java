@@ -32,6 +32,7 @@ public class ExplorerView extends ViewPart
 
 	}
 
+	
 	@Override
 	public void createPartControl(Composite a_parent)
 	{
@@ -74,8 +75,8 @@ public class ExplorerView extends ViewPart
 							DirecroryStructure.getStatisticForSelectedFolder(direcroryStructure),
 							m_fileRestriction.getLineAmount());
 
-					m_descriptionView.changeName(direcroryStructure.getDirectoryName(),
-							direcroryStructure.getFullDirectoryPath());
+					m_descriptionView.changeTitle(direcroryStructure.getDirectoryName(),
+							direcroryStructure.getFullDirectoryPath(), createImageOfDirectory());
 
 					System.out.println(direcroryStructure.getDirectoryName());
 				}
@@ -85,8 +86,8 @@ public class ExplorerView extends ViewPart
 					AbstractStatistic abstractStatistic = (AbstractStatistic) selectedNode;
 
 					m_descriptionView.printFileStatistic(abstractStatistic);
-					m_descriptionView.changeName(abstractStatistic.getShortFileName(),
-							abstractStatistic.getLongFileName());
+					m_descriptionView.changeTitle(abstractStatistic.getShortFileName(),
+							abstractStatistic.getLongFileName(), abstractStatistic.getImage());
 
 					System.out.println(abstractStatistic.getLongFileName());
 				}

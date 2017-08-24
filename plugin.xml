@@ -15,9 +15,10 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="Statistic count"
             class="com.statistic.count.Perspective"
-            id="com.statistic.count.perspective">
+            icon="icons/statIcon.png"
+            id="com.statistic.count.perspective"
+            name="Statistic count">
       </perspective>
    </extension>
    <extension

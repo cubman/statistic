@@ -43,15 +43,7 @@ public class FormatChooseDialog extends Dialog
 	{
 		Shell shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 
-		// Shell dialog = new Shell(parent, SWT.DIALOG_TRIM |
-		// SWT.APPLICATION_MODAL);
 		shell.setSize(500, 190);
-
-		shell.setText("Выберите параметры поиска");
-		createContents(shell);
-		// shell.pack();
-		shell.open();
-
 		Display display = getParent().getDisplay();
 		Point point = display.getActiveShell().getLocation();
 		Point mainWindow = getParent().getSize();
@@ -59,8 +51,11 @@ public class FormatChooseDialog extends Dialog
 
 		shell.setLocation(point.x + (mainWindow.x - point.x) / 2 - paramWindow.x / 2,
 				point.y + (mainWindow.y - point.y) / 2 - paramWindow.y / 2);
+		
+		shell.setText("Выберите параметры поиска");
+		createContents(shell);
+		shell.open();
 
-		shell.addListener(SWT.Move, tener -> System.out.println(shell.getLocation()));
 		while(!shell.isDisposed())
 		{
 			if(!display.readAndDispatch())
@@ -156,9 +151,6 @@ public class FormatChooseDialog extends Dialog
 				shell.close();
 			});
 
-		// Set the OK button as the default, so
-		// user can type input and press Enter
-		// to dismiss
 		shell.setDefaultButton(ok);
 	}
 

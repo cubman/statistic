@@ -5,6 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -20,7 +24,8 @@ public class DescriptionView extends ViewPart
 {
 	public static String	ID	= "com.statistic.count.description";
 	private TreeViewer		m_treeViewer;
-
+	private ResourceManager m_resourceManager;
+	
 	@Override
 	public void createPartControl(Composite a_parent)
 	{
@@ -43,6 +48,8 @@ public class DescriptionView extends ViewPart
 
 		m_treeViewer.setContentProvider(new TableContentProvider());
 		m_treeViewer.setLabelProvider(new TableLabelProvider());
+		
+		m_resourceManager = new LocalResourceManager(JFaceResources.getResources());
 	}
 
 	@Override
@@ -57,10 +64,11 @@ public class DescriptionView extends ViewPart
 	}
 
 	// наименование заголовка вкладки
-	public void changeName(String a_string, String a_toolTipPath)
+	public void changeTitle(String a_string, String a_toolTipPath, ImageDescriptor a_descriptor)
 	{
 		setPartName(a_string);
 		setTitleToolTip(a_toolTipPath);
+		setTitleImage( m_resourceManager.createImage(a_descriptor));
 	}
 
 	// отобразить статистику для директории
