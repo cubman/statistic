@@ -26,7 +26,7 @@ public class Preference extends FieldEditorPreferencePage implements IWorkbenchP
 		addField(new DirectoryFieldEditor("PATH", "Путь изначального поиска:",
 				getFieldEditorParent()));
 
-		addField(new SpinnerFieldEditor("SPINNER", "Количество кодовых строк, входящие в поиск",
+		addField(new SpinnerFieldEditor("SPINNER", "Количество кодовых строк, включенные в поиск",
 				getFieldEditorParent()));
 
 	}
