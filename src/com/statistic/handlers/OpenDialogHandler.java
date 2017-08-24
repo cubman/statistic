@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 
+import com.statistic.count.Activator;
 import com.statistic.count.FileRestriction;
 import com.statistic.views.FormatChooseDialog;
 
@@ -26,6 +27,7 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 	public Object execute(ExecutionEvent a_event) throws ExecutionException
 	{
 		Shell shell = new Shell(Display.getDefault());
+	        
 		FormatChooseDialog formatChooseDialog = new FormatChooseDialog(shell);
 		FileRestriction fileRestriction = formatChooseDialog.openDialog();
 
@@ -45,7 +47,8 @@ public class OpenDialogHandler extends AbstractHandler implements IHandler
 		// диалоговое окно выбора директории
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 		// путь по умолчанию
-		dialog.setFilterPath("D:\\EclipseWorkDirectory");
+		dialog.setFilterPath(Activator.getDefault().getPreferenceStore()
+                .getString("PATH"));
 
 		// выбранный пользователем каталог(путь к нему)
 		String resultString = dialog.open();

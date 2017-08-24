@@ -19,7 +19,9 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.statistic.count.Activator;
 import com.statistic.count.FileRestriction;
+import com.statistic.count.SpinnerFieldEditor;
 import com.statistic.fileformat.FileFormatManager;
 import com.statistic.fileformat.IFileFormat;
 
@@ -86,10 +88,11 @@ public class FormatChooseDialog extends Dialog
 
 		data = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
 		m_spinner = new Spinner(shell, SWT.BORDER | SWT.RIGHT);
-		m_spinner.setIncrement(5);
-		m_spinner.setMinimum(10);
-		m_spinner.setMaximum(200);
+		m_spinner.setIncrement(SpinnerFieldEditor.INCREMENT_VALUE);
+		m_spinner.setMinimum(SpinnerFieldEditor.MIN_VALUE);
+		m_spinner.setMaximum(SpinnerFieldEditor.MAX_VALUE);
 		m_spinner.setToolTipText("Минимальное значение кодовых строк");
+		m_spinner.setSelection(Activator.getDefault().getPreferenceStore().getInt("SPINNER"));
 		m_spinner.setLayoutData(data);
 
 		data = new GridData(SWT.FILL, SWT.FILL, true, false);

@@ -17,8 +17,8 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
-import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.statistic.count.Activator;
 import com.statistic.count.FileRestriction;
 import com.statistic.fileformat.FileFormatManager;
 
@@ -59,7 +59,8 @@ public class CountProjectStatisticHandler extends AbstractHandler implements IHa
 			try
 			{
 				// получаем список форматов исходя из проекта
-				fileRestriction = new FileRestriction(0, FileFormatManager.getInstance()
+				fileRestriction = new FileRestriction(Activator.getDefault().getPreferenceStore()
+		                .getInt("SPINNER"), FileFormatManager.getInstance()
 						.getFileFormatByProjectNature(iProject.getDescription().getNatureIds()));
 			}
 			catch(CoreException e)

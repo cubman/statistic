@@ -1,13 +1,12 @@
 package com.statistic.folders;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.statistic.count.FileRestriction;
 import com.statistic.fileformat.AbstractStatistic;
 import com.statistic.fileformat.IFileFormat;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class DirecroryStructure
 {

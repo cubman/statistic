@@ -122,5 +122,19 @@
          </enabledWhen>
       </handler>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.statistic.count.Preference"
+            id="com.statistic.count.Settings"
+            name="Настройки статистики">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.statistic.count.StatisticInitialiser">
+      </initializer>
+   </extension>
 
 </plugin>
